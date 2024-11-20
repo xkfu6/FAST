@@ -1,0 +1,423 @@
+<!-- 加载ckplayer视频插件 -->
+<link rel="stylesheet" href="/assets/home/plugin/ckplayer/css/ckplayer.css">
+<script src="/assets/home/plugin/ckplayer/js/ckplayer.min.js"></script>
+
+<!-- 下拉刷新 -->
+<link rel="stylesheet" href="/assets/home/plugin/mescroll/mescroll.min.css" />
+<script src="/assets/home/plugin/mescroll/mescroll.min.js"></script>
+
+<!-- 引入http请求插件 -->
+<script src="/assets/home/plugin/axios/axios.min.js"></script>
+<script src="/assets/home/plugin/axios/request.js"></script>
+
+<link rel="stylesheet" href="/assets/home/css/details.css">
+
+
+<header class="mui-bar mui-bar-nav mui-bar-nav-bg">
+    <div class="nav">
+        <ul id="tab">
+            <li class="active" data-type="course">课程</li>
+            <li data-type="info">详情</li>
+            <li data-type="comment">评论</li>
+        </ul>
+    </div>
+</header>
+
+<div id="tab-content">
+    <div id="course" class="active">
+        <div id="cover">
+            <!-- 课程封面 -->
+            <img class="cover_bg" src="/assets/home/images/video.jpg">
+            <!-- 中间播放键 -->
+            <div id="play">
+                <img src="/assets/home/images/play.png" />
+            </div>
+        </div>
+
+        <!-- ckplayer视频容器元素 -->
+        <div id="video"></div>
+
+        <!-- 课程信息 -->
+        <div class="head">
+            <div class="info">
+                <h4 class="name">{$subject.title}</h4>
+                <div class="action">
+                    {if condition="$subject.likes_active"}
+                    <!-- 点赞 -->
+                    <img class="thumbs" src="/assets/home/images/thumbs-up.png" />
+                    {else /}
+                    <!-- 未点赞 -->
+                    <img class="thumbs" src="/assets/home/images/thumbs.png" />
+                    {/if}
+                    <span class="num">{$subject.likes_text}</span>
+                </div>
+            </div>
+            <ul>
+                <li>
+                    <span>课程分类：{$subject.category.name}</span>
+                </li>
+                <li>
+                    <span>课程价格：</span>
+                    <span class="price">￥{$subject.price}</span>
+                </li>
+                <li>
+                    <span>章节总数：</span>{$chapter|count}
+                </li>
+                <li>
+                    <span>发布时间：</span>{$subject.createtime_text}
+                </li>
+            </ul>
+        </div>
+
+        <!-- 授课老师 -->
+        <div class="teacher">
+            <div class="title">授课老师</div>
+            <div class="info">
+                <div class="left">
+                    <div class="avatar">
+                        <a href="#">
+                            <img src="{$subject.teacher.avatar_text}" alt="">
+                        </a>
+                    </div>
+                </div>
+                <div class="right">
+                    <div class="name">
+                        <a href="#">
+                            {$subject.teacher.name}
+                        </a>
+                    </div>
+                    <div class="job">{$subject.teacher.job}</div>
+                    <div class="content">
+                        {$subject.teacher.content}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 课程章节 -->
+        <div class="chapter">
+            <div class="title">课程章节</div>
+            <ul>
+                {if condition="$chapter"}
+                {foreach $chapter as $key=>$item}
+                <li data-cid="{$item.id}">{$key + 1}、{$item.title}</li>
+                {/foreach}
+                {else /}
+                <li data-cid="0">暂无课程章节</li>
+                {/if}
+            </ul>
+        </div>
+
+        <!-- 购买 -->
+        <div class="footer">
+            <div class="footer-box">
+                <div class="collection">
+                    {if condition="$subject.sc"}
+                    <img src="/assets/home/images/rate_active.png" alt="">
+                    <span>已收藏</span>
+                    {else/}
+                    <img src="/assets/home/images/rate.png" alt="">
+                    <span>收藏</span>
+                    {/if}
+                </div>
+                <!-- <button class="btn">播放</button> -->
+                {if condition="$buy"}
+                <a class="btn">已经购买</a>
+                {else /}
+                <a href="{:url('home/subject/confirm', ['subid' => $subject['id']])}" class="btn">购买</a>
+                {/if}
+            </div>
+        </div>
+    </div>
+    <div id="info">
+        <div class="mui-table-view content">课程描述
+            {$subject.content}
+        </div>
+    </div>
+
+    <!-- 评论 -->
+    <div id="comment">
+        <!-- 搜索框 -->
+        <div class="search mui-input-row mui-search wow bounceIn">
+            <input type="search" placeholder="请输入名称" name="search" />
+        </div>
+
+        <!-- 评论内容 -->
+        <div id="list">
+            <ul class="mui-table-view list"></ul>
+        </div>
+    </div>
+</div>
+
+<!-- 弹出菜单 -->
+<div id="sheet1" class="mui-popover mui-popover-bottom mui-popover-action">
+    <!-- 可选择菜单 -->
+    <ul class="mui-table-view">
+        <li class="mui-table-view-cell">
+            <a id="buy" href="javascript:void(0)">
+                立即购买
+            </a>
+        </li>
+    </ul>
+    <!-- 取消菜单 -->
+    <ul class="mui-table-view">
+        <li class="mui-table-view-cell">
+            <a href="#sheet1"><b>取消</b></a>
+        </li>
+    </ul>
+</div>
+
+<script>
+    var cid = 0; //章节的id
+    var player;  //播放器
+    $(document).ready(function () {
+        //当页面渲染完成后，获取默认的第一个章节的id
+        cid = $(".chapter li:first").data('cid') ? $(".chapter li:first").data('cid') : 0
+        $(".chapter li:first").addClass('active')
+
+        $(".chapter li:first").addClass('active')
+        $(".chapter li").click(function () {
+            cid = $(this).data('cid') ? $(this).data('cid') : 0
+            $(this).addClass('active').siblings().removeClass('active')
+            //暂停播放
+            if (player) player.pause()
+            // 将封面显示，视频隐藏
+            $("#cover").show()
+            $("#video").hide()
+
+            PlayVideo()
+
+        })
+    })
+    $('#tab li').click(function () {
+        let type = $(this).data('type');
+
+        $(this).addClass('active').siblings().removeClass('active');
+        $('#tab-content #' + type).addClass('active').siblings().removeClass('active');
+    })
+
+
+    $("#iosActionsheetCancel").click(function () {
+        mui('#sheet1').popover('toggle');
+    })
+
+
+
+    // 点赞
+    $(".action").on('click', function () {
+        var title = `{$subject.likes_active ? '取消点赞' : '点赞'}`
+        mui.confirm(`是否确认${title}`, `${title}提醒`, ['否', '是'], async function (res) {
+            if (res.index) {
+                var result = await POST({
+                    url: '/subject/like',
+                    params: {
+                        subid: `{$subject.id}`
+                    }
+                })
+            }
+            mui.toast(result.msg)
+            if (!result.code) return false
+            action = result.data ? result.data : ''
+            if (action == 'active')  ///点赞
+            {
+                $('.action .thumbs').attr('src', '/assets/home/images/thumbs-up.png')
+                var num = $('.action .num').text();
+                num = parseInt(num) > 0 ? parseInt(num) : 0;
+                $('.action .num').text(++num);
+            } else if (action == 'cancel') {
+                $('.action .thumbs').attr('src', '/assets/home/images/thumbs.png')
+                var num = $('.action .num').text();
+                num = parseInt(num) > 0 ? parseInt(num) : 0;
+                $('.action .num').text(--num);
+            }
+        })
+    })
+
+    // 收藏
+    $('.collection').on('click', function () {
+        mui.confirm(`是否确认`, `提醒`, ['否', '是'], async function (res) {
+            if (res.index) {
+                var result = await POST({
+                    url: '/subject/collevtion',
+                    params: {
+                        subid: `{$subject.id}`
+                    }
+                })
+            }
+            mui.toast(result.msg)
+            if (!result.code) return false
+            scaction = result.data ? result.data : ''
+            if (scaction == 'active') {
+                $('.collection img').attr('src', '/assets/home/images/rate_active.png')
+                $('.collection span').text('已收藏')
+            } else if (scaction == 'cancel') {
+                $('.collection img').attr('src', '/assets/home/images/rate.png')
+                $('.collection span').text('收藏')
+
+            }
+        })
+    })
+    new WOW({
+        boxClass: 'wow',      // 需要执行动画的元素的 class(默认是wow)
+        animateClass: 'animated fadeInDown', // animation.css 动画的 class(默认是animated)
+        offset: 0,          // 距离可视区域多少开始执行动画(默认为0)
+        mobile: true,       // 是否在移动设备上执行动画(默认为true)
+        live: true,       // 异步加载的内容是否有效(默认为true)
+        scrollContainer: '#list' // 可选滚动容器选择器，否则使用窗口
+    }).init();
+
+
+    // 评论
+    var keywords = '';
+
+    $("input[name=search]").change(function () {
+        keywords = $(this).val()
+        DownCallback()
+    })
+
+    //配置下拉刷新和上拉加载
+    var scroll = new MeScroll('list', {
+        down: {
+            auto: false, //是否在初始化完毕之后自动执行下拉回调callback; 默认true
+            callback: DownCallback //下拉刷新的回调
+        },
+        up: {
+            auto: true, //是否在初始化时以上拉加载的方式自动加载第一页数据; 默认false
+            isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
+            callback: UpCallback, //上拉回调,此处可简写; 相当于 callback: function (page) { upCallback(page); }
+            toTop: { //配置回到顶部按钮
+                duration: 300,
+                src: "/assets/home/plugin/mescroll/mescroll-totop.png", //默认滚动到1000px显示,可配置offset修改
+                offset: 100,
+                supportTap: true, //快速响应
+            }
+        }
+    })
+
+    // 下拉刷新回调
+    function DownCallback() {
+        scroll.resetUpScroll()
+        $('#list .list').empty()
+    }
+
+    // 上拉刷新回调
+    async function UpCallback(current) {
+        //当前页码值
+        var page = current.num
+
+        //组装数据
+        var data = {
+            page: page,
+            keywords: keywords
+        };
+
+        var result = await POST({
+            url: `/subject/info?subid={$subject.id}`,
+            params: data
+        })
+
+        if (!result) return false
+
+        if (result.code == 0) {
+            // mui.toast(result.msg, {duration: 1000})
+            // 暂无更多数据
+            scroll.endBySize(0, 0)
+            return false
+        }
+
+        var list = result.data.list
+        var count = result.data.count
+
+        //设置上拉加载状态
+        scroll.endBySize(list.length, count)
+        FetchList(list)
+    }
+    function FetchList(list) {
+        for (var item of list) {
+            var rate = item.rate ? Math.abs(parseInt(item.rate)) : 0
+            var rate_temp = ''
+            for (var i = 0; i <= 4; i++) {
+                if (i < rate) {
+                    rate_temp += `<span><img src="/assets/home/images/rate_active.png" alt=""></span>`
+                } else {
+                    rate_temp += `<span><img src="/assets/home/images/rate.png" alt=""></span>`
+                }
+            }
+            var temp = `
+                <li class="mui-table-view-cell mui-media wow bounceIn"  data-wow-delay="0.1s">
+                    <img class="mui-media-object mui-pull-left userimg" src="${item.business.avatar_text}">
+                    <div class="mui-media-body">
+                        <div class="header">
+                            <span class="nickname">${item.business.nickname}</span>
+                        </div>
+                        <p>${item.content}</p>
+                        <div class="rate">${rate_temp}</div>
+                    </div>
+                </li>
+            `
+            $('#list .list').append(temp)
+        }
+    }
+
+
+    // 点击播放
+    $("#play").on('click', PlayVideo)
+    async function PlayVideo() {
+        //发送请求
+        var result = await POST({
+            url: '/subject/play',
+            params: {
+                cid,
+                subid: `{$subject.id}`
+            }
+        })
+        console.log(result.data)
+        if (result.code == 0) {
+            //判断是否是没有购买课程的错误
+            var action = result.data.action ? result.data.action : ''
+
+            if (action == "buy") {
+                mui('#sheet1').popover('toggle');
+            } else {
+                mui.toast(result.msg)
+            }
+
+        }
+
+        //播放视频
+        var url = result.data.url ? result.data.url : ''
+        //将封面隐藏
+        $("#cover").hide()
+        $("#video").show()
+
+        //进行播放
+        var videoObject = {
+            container: '#video',
+            video: url, //播放地址
+            autoplay: true,//是否自动播放
+            loop: false,//是否需要循环播放
+            ended: null,//结束显示的内容
+            webFull: true,//是否启用页面全屏按钮，默认不启用
+            theatre: true,//是否启用剧场模式按钮，默认不启用
+            controls: true,//是否显示自带控制栏
+            rightBar: true,//是否开启右边控制栏
+            smallWindows: true,//是否启用小窗口模式
+            smallWindowsDrag: true,//小窗口开启时是否可以拖动
+            screenshot: true,//截图功能是否开启
+            timeScheduleAdjust: 1,//是否可调节播放进度,0不启用，1是启用，2是只能前进（向右拖动），3是只能后退，4是只能前进但能回到第一次拖动时的位置，5是看过的地方可以随意拖动
+            logo: '',//logo
+        }
+
+        player = new ckplayer(videoObject)
+    }
+
+    $("#buy").on('click', function () {
+        mui('#sheet1').popover('toggle');
+        var btnArray = ['否', '是'];
+        mui.confirm('请问您确认购买吗？', '尊敬的用户', btnArray, function (e) {
+            if (e.index = 1) {
+                location.href = "/assets/home/buy.html";
+            }
+        })
+    })
+</script>

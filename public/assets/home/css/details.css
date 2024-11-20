@@ -1,0 +1,269 @@
+body{
+    padding: 46px 0 60px;
+}
+
+.nav {
+    display: flex;
+    justify-content: center;
+}
+
+#tab {
+    padding: 9px 0 0;
+    display: flex;
+}
+
+#tab li {
+    font-size: 16px;
+    padding: 0 20px 0;
+    display: inline-block;
+}
+
+#tab li.active {
+    color: #2f88ff;
+}
+
+#tab li.active::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: #2f88ff;
+    margin-top: 10px;
+}
+
+#info,
+#comment,
+#course {
+    display: none;
+}
+
+#info.active,
+#comment.active,
+#course.active {
+    display: block;
+}
+
+#cover {
+    height: 274px;
+}
+
+#cover .cover_bg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#play {
+    width: 100%;
+    height: 70vw;
+    text-align: center;
+    line-height: 80vw;
+    position: absolute;
+    top: 0;
+}
+
+#play img {
+    width: 20vw;
+    height: 20vw;
+}
+
+#video {
+    width: 100%;
+    height: 274px;
+    display: none;
+}
+
+.head {
+    background-color: white;
+    height: auto;
+    padding: 20px 15px;
+}
+
+.head .info {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    align-content: stretch;
+}
+
+.head .info h4 {
+    margin: 0;
+    padding: 0;
+    margin-top: 5px;
+}
+
+.head .info .action {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+}
+
+.head .thumbs {
+    width: 25px;
+    display: inline-block;
+}
+
+.head .num {
+    font-size: 16px;
+    display: inline-block;
+    margin-left: 3px;
+    height: 25px;
+    line-height: 30px;
+}
+
+.head ul{
+    margin-top: 10px;
+}
+
+.head ul li{
+    padding: 10px;
+    box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
+}
+
+.head ul li span{
+    font-weight: 600;
+}
+
+.head ul li .price{
+    color: red;
+}
+
+/* 授课老师 */
+.teacher {
+    margin-top: 10px;
+    background: #fff;
+}
+
+.teacher > .title {
+    padding: 6px 10px 6px;
+    font-size: 18px;
+    box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
+}
+
+.teacher > .info {
+    display: flex;
+    margin-top: 10px;
+    padding: 0 10px 10px;
+}
+
+.teacher > .info .left {
+    width: 30%;
+}
+
+.teacher > .info .avatar {
+    width: 110px;
+    height: 110px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+.teacher > .info .avatar img {
+    width: 100%;
+    height: 100%;
+}
+
+.teacher > .info .right {
+    width: 70%;
+    margin-left: 15px;
+}
+
+.teacher > .info .right .name a {
+    font-size: 18px;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.teacher > .info .right .content {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    /* 定义文本的行数 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 8px;
+}
+
+/* 章节 */
+.chapter {
+    background-color: #fff;
+    margin-top: 10px;
+}
+
+.chapter .title {
+    padding: 6px 10px 6px;
+    font-size: 18px;
+    box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
+}
+
+.chapter ul li {
+    padding: 10px;
+    box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2);
+}
+
+.footer{
+    position: fixed;
+    margin-top: 10px;
+}
+
+/* 底部 */
+.footer .footer-box{
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+}
+
+.footer-box .collection{
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-box .collection img{
+    width: 20px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.footer-box .btn{
+    width: 100%;
+    height: 100%;
+    background: #2f88ff;
+    color: #fff;
+    text-align: center;
+    line-height: 50px;
+}
+
+/* 评论 */
+.mui-table-view .mui-media-object{
+    width: 70px;
+    height: 70px;
+    max-width: 70px;
+}
+
+.list li .rate span{
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.list li p{
+    margin-top: 5px;
+}
+
+#tab-content{
+    padding-bottom:10em;
+}
+
+.chapter .active{
+    color:#2f88ff;
+    transition: all linear .3s;
+}

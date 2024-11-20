@@ -1,0 +1,124 @@
+<!-- mescroll -->
+<link rel="stylesheet" href="/assets/home/plugin/mescroll/mescroll.min.css" />
+<script src="/assets/home/plugin/mescroll/mescroll.min.js"></script>
+
+<!-- 引入http请求插件 -->
+<script src="/assets/home/plugin/axios/axios.min.js"></script>
+<script src="/assets/home/plugin/axios/request.js"></script>
+
+<link rel="stylesheet" href="/assets/home/css/ranking.css" />
+<link rel="stylesheet" href="/assets/home/css/comment_list.css" />
+
+<div class="top wow">
+    <img src="/assets/home/images/ranking_back.png" />
+</div>
+
+<div id="box">
+    <!-- 评论内容 -->
+    <ul class="mui-table-view list" style="overflow-y: auto;">
+
+    </ul>
+</div>
+
+{literal}
+<script>
+    new WOW({
+        boxClass: 'wow',      // 需要执行动画的元素的 class(默认是wow)
+        animateClass: 'animated fadeInDown', // animation.css 动画的 class(默认是animated)
+        offset: 0,          // 距离可视区域多少开始执行动画(默认为0)
+        mobile: true,       // 是否在移动设备上执行动画(默认为true)
+        live: true,       // 异步加载的内容是否有效(默认为true)
+        scrollContainer: '#box' // 可选滚动容器选择器，否则使用窗口
+    }).init();
+
+    //创建下拉对象
+    var scroll = new MeScroll('box', {
+        down: {
+            auto: false, //是否在初始化完毕之后自动执行下拉回调callback; 默认true
+            callback: DownCallback //下拉刷新的回调
+        },
+        up: {
+            page: {
+                num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
+            },
+            auto: true, //是否在初始化时以上拉加载的方式自动加载第一页数据; 默认false
+            isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
+            callback: UpCallback, //上拉回调,此处可简写; 相当于 callback: function (page) { upCallback(page); }
+            toTop: { //配置回到顶部按钮
+                duration: 300,
+                src: "/assets/home/plugin/mescroll/mescroll-totop.png", //默认滚动到1000px显示,可配置offset修改
+                offset: 100,
+                supportTap: true, //快速响应
+            }
+        }
+    })
+
+    //下拉刷新
+    function DownCallback() {
+        scroll.resetUpScroll()
+
+        $("#box .list").empty()
+
+    }
+    async function UpCallback(res) {
+        var result = await POST({
+            url: '/index/comment_list',
+            params: { page: res.num }
+        })
+        console.log(res.num)
+        if (!result) return false
+        if (result.code === 0) {
+            mui.toast(result.msg, { duration: 1000 })
+            scroll.endByPage(0, 0);
+            return flase;
+        }
+        var list = result.data.list
+        var count = result.data.count
+
+        // scroll.endByPage(list.length, count);
+        scroll.endByPage(10, 21);
+
+        html(list)
+    }
+    function html(list) {
+        var ishtml = ''
+
+        for (var item of list) {
+            console.log(`${item.business.nickname}`)
+            ishtml = `
+            <li class="item mui-table-view-cell mui-media wow" data-wow-delay="100ms">
+                <img class="mui-media-object mui-pull-left userimg" src="${item.business.avatar_text}">
+                <div class="mui-media-body">
+                    <div class="header">
+                        <span class="nickname">${item.business.nickname}</span>
+                        对
+                        <a class="course" href="details.html">${item.subject.title}</a>
+                        评论：
+                    </div>
+                    <p>${item.content}</p>
+                    <div class="rate">
+                        <span>
+                            <img src="/assets/home/images/rate_active.png" alt="">
+                        </span>
+                        <span>
+                            <img src="/assets/home/images/rate.png" alt="">
+                        </span>
+                        <span>
+                            <img src="/assets/home/images/rate.png" alt="">
+                        </span>
+                        <span>
+                            <img src="/assets/home/images/rate.png" alt="">
+                        </span>
+                        <span>
+                            <img src="/assets/home/images/rate.png" alt="">
+                        </span>
+                    </div>
+                </div>
+            </li>
+        `
+            $('#box ul').append(ishtml)
+        }
+
+    }
+</script>
+{/literal}

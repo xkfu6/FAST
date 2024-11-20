@@ -1,0 +1,156 @@
+<link rel="stylesheet" href="/assets/home/css/live.css" />
+
+<!-- 加载ckplayer视频插件 -->
+<link rel="stylesheet" href="/assets/home/plugin/ckplayer/css/ckplayer.css" />
+<script src="/assets/home/plugin/ckplayer/js/ckplayer.js"></script>
+
+<!-- aliplayer 播放器插件 -->
+<!-- <link rel="stylesheet" href="https://g.alicdn.com/de/prismplayer/2.8.1/skins/default/aliplayer-min.css" />  
+<script type="text/javascript" charset="utf-8" src="https://g.alicdn.com/de/prismplayer/2.8.1/aliplayer-min.js"></script> -->
+
+<header class="mui-bar mui-bar-nav mui-bar-nav-bg">
+    <h1 class="mui-title">课程直播</h1>
+</header>
+
+<div class="box" style="position: relative;">
+    <div class="prism-player" id="live"></div>
+</div>
+
+<!-- 聊天框 -->
+<div class="footer-box">
+    <form id="chat">
+        <div class="comment">
+            <input type="text" name="content" placeholder="输入评论" required />
+
+            <div class="cart-btn">
+                <img src="/assets/home/images/shopping-cart.png" />
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="product-box">
+    <div class="title">直播推荐</div>
+    <div class="close">X</div>
+    <div class="list">
+        {foreach $product as $item}
+        <div class="item">
+            <div class="thumb">
+                <a href="{:url('home/subject/info', ['subid' => $item['relation']])}">
+                    <img src="{$item.subjects.thumbs_text}" />
+                </a>
+            </div>
+            <div class="info">
+                <a class="title" href="{:url('home/subject/info', ['subid' => $item['relation']])}">{$item.subjects.title}</a>
+                <div class="footer">
+                    <div class="price">￥{$item.price}(库存：{$item.stock})</div>
+                    <a href="confirm.html" class="buy">购买</a>
+                </div>
+            </div>
+        </div>
+        {/foreach}
+    </div>
+</div>
+
+<script>
+    //商品弹框
+    $('.cart-btn').click(function () {
+        $('.product-box').addClass('open');
+    });
+
+    //商品弹框关闭
+    $('.close').click(function () {
+        $('.product-box').removeClass('open');
+    })
+
+    //表单提交
+    $("#chat").on('submit', function(e){
+        e.preventDefault()
+        roll()
+    })
+    
+    //进行播放
+    
+    var videoObject = {
+        container: '#live',
+        live:true,//指定为直播
+        plug:'hls.js',//使用hls.js插件播放m3u8
+        video: "/assets/home/images/video.mp4",
+        autoplay: true,//是否自动播放
+        loop: true,//是否需要循环播放
+        ended:null,//结束显示的内容
+        webFull:true,//是否启用页面全屏按钮，默认不启用
+        theatre:true,//是否启用剧场模式按钮，默认不启用
+        controls:true,//是否显示自带控制栏
+        rightBar:true,//是否开启右边控制栏
+        smallWindows:true,//是否启用小窗口模式
+        smallWindowsDrag:true,//小窗口开启时是否可以拖动
+        screenshot:true,//截图功能是否开启
+        timeScheduleAdjust:1,//是否可调节播放进度,0不启用，1是启用，2是只能前进（向右拖动），3是只能后退，4是只能前进但能回到第一次拖动时的位置，5是看过的地方可以随意拖动
+        logo:'',//logo
+    }
+    var player = new ckplayer(videoObject)
+
+    // var player = new Aliplayer({  
+    //     "id": "live",  
+    //     "source": "拉流地址",  
+    //     "width": "100%",  
+    //     "height": "75vh",  
+    //     "videoHeight":"75vh",
+    //     "autoplay": true,  
+    //     "isLive": true,  
+    //     "rePlay": true,  
+    //     "playsinline": true,  
+    //     "preload": true,  
+    //     "controlBarVisibility": "hover",  
+    //     "useH5Prism": true,
+    //     "fullscreenService": {
+    //         requestFullScreen:true
+    //     }
+    //     }, function (player) {  
+    //         player._switchLevel = 0;  
+    //         console.log("播放器创建了。");  
+    //     }  
+    // );  
+
+
+
+    //弹幕滚动
+    var roll = () => 
+    {
+        var content = $('input[name=content]').val()
+        $('input[name=content]').val('').focus()
+
+        var ele = player.layer({
+            'class':'dm',//弹幕的样式
+            'content':content
+        });
+        
+        // 44是头部header的高度
+        var top = Math.floor(Math.random()*(document.documentElement.clientHeight - ele.getWidth() - 44))
+        var r = Math.floor(Math.random()*255);
+        var g = Math.floor(Math.random()*255);
+        var b = Math.floor(Math.random()*255);
+        
+        if(ele)
+        {
+            ele.style.top = `${top}px`
+            ele.style.background = `rgb(${r}, ${g}, ${b})`
+        }
+
+        //animate-缓动函数
+        ele.animate('left:'+(-ele.getWidth()+'px'), 10000,'',function(){
+            ele.remove();//从页面中删除元件
+        });
+
+        //鼠标经过该元件时暂停缓动
+        ele.mouseover(function(){
+            this.animatePause();
+        });
+
+        //鼠标离开该元件时继续缓动
+        ele.mouseout(function(){
+            this.animatePlay();
+        });
+    }
+</script>

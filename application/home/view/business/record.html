@@ -1,0 +1,103 @@
+<!-- mescroll -->
+<link rel="stylesheet" href="/assets/home/plugin/mescroll/mescroll.min.css" />
+<script src="/assets/home/plugin/mescroll/mescroll.min.js"></script>
+
+<!-- 引入http请求插件 -->
+<script src="/assets/home/plugin/axios/axios.min.js"></script>
+<script src="/assets/home/plugin/axios/request.js"></script>
+
+<link rel="stylesheet" href="/assets/home/css/record.css">
+<!-- 搜索框 -->
+<div class="mui-input-row mui-search wow">
+    <input type="search" placeholder="请输入关键词" name="search" />
+</div>
+
+<div id="box">
+    <div class="list">
+
+    </div>
+</div>
+
+<script>
+    new WOW({
+        boxClass: 'wow',      // 需要执行动画的元素的 class(默认是wow)
+        animateClass: 'animated fadeInDown', // animation.css 动画的 class(默认是animated)
+        offset: 0,          // 距离可视区域多少开始执行动画(默认为0)
+        mobile: true,       // 是否在移动设备上执行动画(默认为true)
+        live: true,       // 异步加载的内容是否有效(默认为true)
+        scrollContainer: null // 可选滚动容器选择器，否则使用窗口
+    }).init();
+    var keywords = '';
+    //给关键词绑定改变事件
+    $("input[name=search]").change(function () {
+        keywords = $.trim($(this).val())
+
+        //重新做下拉刷新
+        DownCallback()
+    })
+    var scroll = new MeScroll('box', {
+        down: {
+            auto: false,
+            callback: DownCallback
+        },
+        up: {
+            page: {
+                num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
+            },
+            auto: true, //是否在初始化时以上拉加载的方式自动加载第一页数据; 默认false
+            isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
+            callback: UpCallback, //上拉回调,此处可简写; 相当于 callback: function (page) { upCallback(page); }
+            toTop: { //配置回到顶部按钮
+                duration: 300,
+                src: "/assets/home/plugin/mescroll/mescroll-totop.png", //默认滚动到1000px显示,可配置offset修改
+                offset: 100,
+                supportTap: true, //快速响应
+            }
+        }
+    })
+    function DownCallback() {
+        scroll.resetUpScroll()
+
+        $("#box .list").empty()
+
+    }
+
+    async function UpCallback(res) {
+        var result = await POST({
+            url: '/business/record',
+            params: { page: res.num, keywords }
+        })
+        if (!result) return false
+
+        if (result.code == 0) {
+            mui.toast(result.msg, { duration: 1000 })
+            // 暂无更多数据
+            scroll.endBySize(0, 0)
+            return false
+        }
+        var list = result.data.list
+        var count = result.data.count
+        //设置上拉加载状态
+        scroll.endBySize(list.length, count)
+
+        FetchList(list)
+    }
+    function FetchList(list) {
+        for (var item of list) {
+            var temp = `
+                    <div class="item wow">
+                        <div class="content">
+                            <span>消费描述：</span>购买课程:${item.content}
+                        </div>
+                        <div class="total">
+                            <span>消费金额：</span>￥${item.total}
+                        </div>
+                        <div class="time">
+                            <span>消费时间：${item.createtime_text}</span>
+                        </div>
+                    </div>
+                    `
+            $('#box .list').append(temp)
+        }
+    }
+</script>

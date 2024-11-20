@@ -1,0 +1,249 @@
+<<<<<<< HEAD
+html,body{
+    background: #111111;
+}
+
+.top{
+    width:100%;
+    height:200px;
+    position: sticky;
+    left:0;
+    top:0;
+    z-index:100;
+}
+
+.top img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.list{
+    width: 100%;
+    background: #111111;
+    position: relative;
+    padding:15px;
+}
+
+.list .item{
+    background: #fff;
+    margin-bottom: 15px;
+    position: relative;
+    width: 100%;
+    border-radius: 5px;
+}
+
+.list .item .icon{
+    position: absolute;
+    width: 20px;
+    height: 30px;
+    background: red;
+    text-align: center;
+    line-height: 30px;
+    color: #fff;
+    left: 5px;
+}
+
+.list .content {
+    padding: 10px;
+}
+
+.list .content a{
+    display: flex;
+    color: #333;
+}
+
+.list .content .thumb{
+    width: 30%;
+    height: 90px;
+}
+
+.list .content .thumb img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.list .content .info{
+    font-size: 12px;
+    margin-left: 10px;
+    width: 70%;
+}
+
+.list .content .info div{
+    margin-bottom: 5px;
+}
+
+.list .content .info span{
+    font-weight: bold;
+}
+
+
+.list .footer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+    padding: 10px 15px;
+    font-size: 12px;
+    background: linear-gradient(0.25turn, #4c314e, #4d2d2d);
+}
+
+.list .left{
+    color: #d8d1da;
+    font-weight: bold;
+}
+
+.list .footer .right a{
+    background: linear-gradient(0.25turn, #fbd6b3, #fbefd9, #ffcfac);
+    color: #977052;
+    padding: 1px 4px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.list .item .tip {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 30%;
+    text-align: right;
+    color: #ffffff;
+    font-style: italic;
+    font-size: 15px;
+    padding: 2px 15px 2px 0;
+    /* border-top-left-radius: 10px; */
+    border-bottom-left-radius: 100px;
+    letter-spacing: 2px;
+    background-image: linear-gradient(55deg, 
+    #745663 0%, #745663 18%, 
+    #5f4e56 18%, #5f4e56 30%,
+    #4d454c 30%, #4d3a3a 100%);
+=======
+html,body{
+    background: #111111;
+}
+
+.top{
+    width:100%;
+    height:200px;
+    position: sticky;
+    left:0;
+    top:0;
+    z-index:100;
+}
+
+.top img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.list{
+    width: 100%;
+    background: #111111;
+    position: relative;
+    padding:15px;
+}
+
+.list .item{
+    background: #fff;
+    margin-bottom: 15px;
+    position: relative;
+    width: 100%;
+    border-radius: 5px;
+}
+
+.list .item .icon{
+    position: absolute;
+    width: 20px;
+    height: 30px;
+    background: red;
+    text-align: center;
+    line-height: 30px;
+    color: #fff;
+    left: 5px;
+}
+
+.list .content {
+    padding: 10px;
+}
+
+.list .content > div{
+    display: flex;
+    color: #333;
+}
+
+.list .content a{
+    color: #211414;
+    font-weight: bold;
+}
+
+.list .content .thumb{
+    width: 30%;
+    height: 90px;
+}
+
+.list .content .thumb img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.list .content .info{
+    font-size: 12px;
+    margin-left: 10px;
+    width: 70%;
+}
+
+.list .content .info div{
+    margin-bottom: 5px;
+}
+
+.list .content .info span{
+    font-weight: bold;
+}
+
+
+.list .footer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+    padding: 10px 15px;
+    font-size: 12px;
+    background: linear-gradient(0.25turn, #4c314e, #4d2d2d);
+}
+
+.list .left{
+    color: #d8d1da;
+    font-weight: bold;
+}
+
+.list .footer .right a{
+    background: linear-gradient(0.25turn, #fbd6b3, #fbefd9, #ffcfac);
+    color: #977052;
+    padding: 1px 4px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.list .item .tip {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 30%;
+    text-align: right;
+    color: #ffffff;
+    font-style: italic;
+    font-size: 15px;
+    padding: 2px 15px 2px 0;
+    /* border-top-left-radius: 10px; */
+    border-bottom-left-radius: 100px;
+    letter-spacing: 2px;
+    background-image: linear-gradient(55deg, 
+    #745663 0%, #745663 18%, 
+    #5f4e56 18%, #5f4e56 30%,
+    #4d454c 30%, #4d3a3a 100%);
+>>>>>>> 4125bc635bef293152cc5c8b74e249bb3d657a84
+}

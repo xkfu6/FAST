@@ -1,0 +1,70 @@
+<link rel="stylesheet" href="/assets/home/css/email.css">
+
+<div class="user">
+    <div class="avatar wow fadeInUp">
+        <img src="/assets/home/images/avatar.jpg" />
+    </div>
+</div>
+
+<form class="mui-input-group" method="post" enctype="multipart/form-data">
+    <div class="mui-input-row wow" data-wow-delay="100ms">
+        <label>邮箱：</label>
+        <input type="text" name="email" value="{$AutoLogin['email']}" class="mui-input-clear" placeholder="请输入邮箱"
+            required disabled />
+    </div>
+
+    <div class="mui-input-row wow" data-wow-delay="200ms">
+        <label>验证码：</label>
+        <input type="text" name="code" class="mui-input-clear" placeholder="请输入验证码" required />
+    </div>
+    <div class="mui-button-row">
+        <button type="submit" class="mui-btn mui-btn-primary wow" data-wow-delay="300ms">确认</button>
+        <button type="button" id="send" class="mui-btn mui-btn-success wow" data-wow-delay="400ms">发送邮件</button>
+    </div>
+</form>
+
+<script src="/assets/home/plugin/axios/axios.min.js"></script>
+<script src="/assets/home/plugin/axios/request.js"></script>
+<script>
+    var sec = 60
+    var T
+
+    $("#send").click(async function () {
+        $(this).attr("disabled", true);
+        $(this).html('正在发送中.....');
+
+        var obj = new Object()
+        obj.url = '/business/email'
+        // 发送一个异步
+        var result = await POST(obj)
+        //轻提醒
+        mui.toast(result.msg, { duration: 3000 })
+        //倒计时
+        $(this).html(sec)
+        $(this).attr('disabled', true)
+        T = setInterval(autoplay, 600)
+    })
+
+    function autoplay() {
+        var num = $("#send").html()
+        num = parseInt(num)
+
+        if (num <= 0) {
+            //停止定时器
+            clearInterval(T)
+            $("#send").removeAttr('disabled')
+            $("#send").html('重新发送验证码')
+        } else {
+            $('#send').html(num - 1)
+        }
+    }
+
+    new WOW({
+        boxClass: 'wow',      // 需要执行动画的元素的 class(默认是wow)
+        animateClass: 'animated fadeInDown', // animation.css 动画的 class(默认是animated)
+        offset: 0,          // 距离可视区域多少开始执行动画(默认为0)
+        mobile: true,       // 是否在移动设备上执行动画(默认为true)
+        live: true,       // 异步加载的内容是否有效(默认为true)
+        scrollContainer: null // 可选滚动容器选择器，否则使用窗口
+    }).init();
+</script>

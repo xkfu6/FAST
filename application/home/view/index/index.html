@@ -1,0 +1,126 @@
+<link rel="stylesheet" href="/assets/home/css/index.css" />
+<script src="/assets/home/js/swiper-bundle.min.js"></script>
+<link rel="stylesheet" href="/assets/home/css/swiper-bundle.css" />
+
+<div class="mui-content">
+    <div class="swiper mySwiper wow fadeIn">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <a href="">
+                    <img src="/assets/home/images/video5.png">
+                    <p class="mui-slider-title">Javascript从零开始</p>
+                </a>
+            </div>
+            <div class="swiper-slide">
+                <a href="">
+                    <img src="/assets/home/images/video3.png">
+                    <p class="mui-slider-title">Javascript从零开始1111</p>
+                </a>
+            </div>
+            <div class="swiper-slide">
+                <a href="">
+                    <img src="/assets/home/images/video2.png">
+                    <p class="mui-slider-title">Javascript从零开始222</p>
+                </a>
+            </div>
+        </div>
+        <div class="swiper-pagination" style="text-align: right;"></div>
+    </div>
+</div>
+
+<div class="menulist">
+    <div class="item wow bounceIn" data-wow-delay="100ms">
+        <a href="/home/index/live.html">
+            <img src="/assets/home/images/live.png" alt="">
+            <div class="name">课程直播</div>
+        </a>
+    </div>
+
+    <div class="item wow bounceIn" data-wow-delay="200ms">
+        <a href="{:url('home/index/comment_list')}">
+            <img src="/assets/home/images/comment.png" alt="">
+            <div class="name">学员评论</div>
+        </a>
+    </div>
+
+    <div class="item wow bounceIn" data-wow-delay="300ms">
+        <a href="{:url('home/index/ranking')}">
+            <img src="/assets/home/images/ranking.png" alt="">
+            <div class="name">课程榜单</div>
+        </a>
+    </div>
+
+    <div class="item wow bounceIn" data-wow-delay="400ms">
+        <a href="{:url('home/coupon/index')}">
+            <img src="/assets/home/images/coupon.png" alt="">
+            <div class="name">领取优惠</div>
+        </a>
+    </div>
+</div>
+
+<div class="list">
+    <div class="title wow">精选课程</div>
+    <ul>
+        {foreach $subject as $item}
+        <li class="wow" data-wow-delay="100ms">
+            <a href="{:url('home/subject/info')}?subid={$item.id}">
+                <div class="imgs">
+                    <img class="mui-media-object" src="{$item.thumbs_text}">
+                </div>
+                <div class="mui-media-body">{$item.title}</div>
+                <div class="info">
+                    <div class="price">￥{$item.price}</div>
+                    <div class="like">
+                        {$item.likes_text}
+                        <img src="/assets/home/images/thumbs-up.png" alt="">
+                    </div>
+                </div>
+            </a>
+        </li>
+        {/foreach}
+    </ul>
+</div>
+
+<!-- 精选名师 -->
+<div class="list teacher">
+    <div class="title wow">精选名师</div>
+    <ul>
+        {foreach $teacher as $item}
+        <li class="wow" data-wow-delay="100ms">
+            <a href="{:url('home/teacher/teacher')}?teacherid={$item.id}">
+                <div class="imgs">
+                    <img class="mui-media-object" src="{$item.avatar_text}">
+                </div>
+                <div class="mui-media-body">{$item.name}</div>
+                <div class="info">
+                    <div class="num">课程数：{$item.subject_count}</div>
+                    <div class="like">
+                        {$item.follow_count}
+                        <img src="/assets/home/images/like.png" alt="">
+                    </div>
+                </div>
+            </a>
+        </li>
+        {/foreach}
+    </ul>
+</div>
+
+<!-- 底部 -->
+{include file="common/footer"}
+
+
+
+<script>
+    var swiper = new Swiper(".mySwiper", {
+        pagination: {
+            el: ".swiper-pagination",
+            autoplay: {
+                delay: 1000,
+                stopOnLastSlide: false,
+                disableOnInteraction: true,
+            }
+        },
+    });
+
+
+</script>

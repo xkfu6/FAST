@@ -1,0 +1,145 @@
+<link rel="stylesheet" href="/assets/home/css/center.css" />
+
+<!-- 头部 -->
+<div class="user">
+    <div class="avatar wow">
+        <img src="{$AutoLogin.avatar_text}" />
+    </div>
+
+    <div class="nickname wow" data-wow-delay="100ms ">{$AutoLogin.nickname}</div>
+</div>
+
+<!-- 菜单 -->
+<div class="menulist">
+    <div class="commonly-used">
+        <div class="title wow">常用工具</div>
+        <div class="list">
+            <div class="item wow" data-wow-delay="100ms">
+                <a href="{:url('home/business/profile')}">
+                    <img src="/assets/home/images/profile.png" alt="">
+                    <div class="name">基本资料</div>
+                </a>
+            </div>
+
+            {if condition="!$AutoLogin['auth']"}
+            <div class="item wow" data-wow-delay="140ms">
+                <a href="email.html">
+                    <img src="/assets/home/images/email.png" alt="">
+                    <div class="name">邮箱认证</div>
+                </a>
+            </div>
+            {/if}
+
+            <div class="item wow" data-wow-delay="120ms">
+                <a href="{:url('home/business/order')}">
+                    <img src="/assets/home/images/course.png" alt="">
+                    <div class="name">我的课程</div>
+                </a>
+            </div>
+
+
+
+            <div class="item wow" data-wow-delay="160ms">
+                <a href="{:url('home/coupon/coupon_list')}">
+                    <img src="/assets/home/images/coupon.png" alt="">
+                    <div class="name">我的优惠券</div>
+                </a>
+            </div>
+
+            <div class="item wow" data-wow-delay="180ms">
+                <a href="{:url('home/business/collection')}">
+                    <img src="/assets/home/images/collection.png" alt="">
+                    <div class="name">我的收藏</div>
+                </a>
+            </div>
+
+            <div class="item wow" data-wow-delay="180ms">
+                <a href="{:url('home/business/concern')}">
+                    <img src="/assets/home/images/order_1.png" alt="">
+                    <div class="name">我的关注</div>
+                </a>
+            </div>
+
+            <div class="item wow" data-wow-delay="200ms">
+                <a href="{:url('home/business/record')}">
+                    <img src="/assets/home/images/record.png" alt="">
+                    <div class="name">消费记录</div>
+                </a>
+            </div>
+
+            <div class="item wow" data-wow-delay="220ms">
+                <a href="{:url('home/business/recharge')}">
+                    <img src="/assets/home/images/recharge.png" alt="">
+                    <div class="name">余额充值</div>
+                </a>
+            </div>
+
+            <div class="item wow" data-wow-delay="240ms">
+                <a href="{:url('home/business/contact')}">
+                    <img src="/assets/home/images/contact.png" alt="">
+                    <div class="name">联系我们</div>
+                </a>
+            </div>
+
+            <div class="item wow" data-wow-delay="260ms" id="logout">
+                <a>
+                    <img src="/assets/home/images/logout_1.png" alt="">
+                    <div class="name">退出账号</div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="promotion">
+        <div class="title wow">推广管理</div>
+        <div class="list">
+            <div class="item wow" data-wow-delay="200">
+                <a href="{:url('home/team/poster')}">
+                    <img src="/assets/home/images/poster.png" alt="">
+                    <div class="name">推广海报</div>
+                </a>
+            </div>
+
+            <div class="item wow" data-wow-delay="220">
+                <a href="{:url('home/team/index')}">
+                    <img src="/assets/home/images/team.png" alt="">
+                    <div class="name">我的团队</div>
+                </a>
+            </div>
+
+            <div class="item wow" data-wow-delay="240">
+                <a href="{:url('home/team/money')}">
+                    <img src="/assets/home/images/money.png" alt="">
+                    <div class="name">提现</div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 底部 -->
+{include file="common/footer"}
+
+<script>
+    $('#logout').click(() => {
+        mui.confirm(
+            '是否确认退出',
+            '退出提醒',
+            ['确认', '取消'],
+            function (res) {
+                if (res.index === 0) {
+                    mui.toast('退出成功')
+
+                    // 关闭当前窗口
+                    $('.mui-popup-backdrop').remove()
+                    $('.mui-popup').remove()
+
+                    setTimeout(() => {
+                        location.href = "{:url('home/index/outlogin')}"
+                    }, 500)
+                }
+            }
+        )
+    })
+
+</script>

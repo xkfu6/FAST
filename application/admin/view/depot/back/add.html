@@ -1,0 +1,98 @@
+<div class="panel panel-default panel-intro" >
+    <div class="panel-body newrow">
+        <form id="add-form" class="form-horizontal" role="form" data-toggle="validator" method="POST">
+            <div class="row">
+                <!-- 订单 -->
+                <!--  data-target="#ModelOrder" 弹出id为ModelOrder的页面 bootstrap模态框的隐藏与显示-->
+                <div class="col-md-4 col-xs-12 form-group">
+                    <label for="orderid" class="control-label col-xs-12 col-md-4 col-sm-4">{:__('OrderCode')}:</label>
+                    <div class="col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" id="ShowOrder" data-toggle="modal"
+                            data-target="#ModelOrder" placeholder="请选择订单" required readonly />
+                        <input type="hidden" id="orderid" name="orderid" required />
+                    </div>
+                </div>
+
+                <!-- 收货地址 -->
+                <div class="col-md-4 col-xs-12 form-group">
+                    <label for="addrid" class="control-label col-xs-12 col-md-4 col-sm-4">收货地址:</label>
+                    <div class="col-md-8 col-sm-8 col-xs-12">
+                        <select id="addrid" class="form-control selectpicker" data-live-search="false" name="addrid"
+                            required data-rule="required;">
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 备注 -->
+                <div class="col-md-4 col-xs-12 form-group">
+                    <label for="remark" class="control-label col-xs-12 col-md-4 col-sm-4">{:__('Remark')}:</label>
+                    <div class="col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" id="remark" name="remark"
+                            placeholder="{:__('Remark')}" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <!-- 物流公司 -->
+                <div class="col-md-4 col-xs-12 form-group">
+                    <label for="orderid" class="control-label col-xs-12 col-md-4 col-sm-4">配送物流公司:</label>
+                    <div class="col-md-8 col-sm-8 col-xs-12">
+                        {$express}
+                    </div>
+                </div>
+                <div class="col-md-4 col-xs-12 form-group">
+                    <label for="orderid" class="control-label col-xs-12 col-md-4 col-sm-4">物流单号:</label>
+                    <div class="col-md-8 col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" id="expresscode" data-rule="required;" required
+                            name="expresscode" placeholder="{:__('ExpressCode')}" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- 表格 -->
+            <div class="form-group col-md-12 col-sm-12">
+                <table id="table" class="table table-striped table-bordered table-hover table-nowrap text-center"
+                    width="100%">
+                    <thead>
+                        <th>商品名称</th>
+                        <th>商品数量</th>
+                        <th>商品单价</th>
+                        <th>商品总价</th>
+                    </thead>
+                    <tbody id="OrderProduct">
+                    </tbody>
+                </table>
+            </div>
+            <!-- 确认框 -->
+            <div class="form-group layer-footer">
+                <label class="control-label col-xs-12 col-sm-2"></label>
+                <div class="col-xs-12 col-sm-8">
+                    <button type="submit" class="btn btn-primary btn-embossed disabled">{:__('OK')}</button>
+                    <button type="button" class="btn btn-default btn-embossed btn-close">{:__('Close')}</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 选择订单弹出框 -->
+<div class="modal fade" id="ModelOrder" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document" style="width:90%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{:__('订单')}</h4>
+            </div>
+            <div class="modal-body">
+                <div id="lays-row" class="row">
+                    <div id="ToolbarOrder" class="toolbar">
+                        {:build_toolbar('refresh')}
+                    </div>
+                    <table id="TableOrder" class="table table-striped table-bordered table-hover">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

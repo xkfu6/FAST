@@ -1,0 +1,56 @@
+<form id="add-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">属性名称:</label>
+        <div class="col-xs-12 col-sm-8">
+            {$prod}
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="name" class="control-label col-xs-12 col-sm-2">属性值:</label>
+        <div class="col-md-8 col-sm-10 col-xs-12">
+            <dl class="fieldlist" data-template="basictpl" data-name="row[prop]">
+                <dd>
+                    <ins>{:__('属性名')}</ins>
+                    <ins>{:__('属性值')}</ins>
+                </dd>
+
+                <dd style="display: none">
+                    <a href="javascript:;" class="btn btn-sm btn-success btn-append"><i class="fa fa-plus"></i>
+                        {:__('Append')}
+                    </a>
+                </dd>
+
+                <!--请注意 dd和textarea间不能存在其它任何元素，实际开发中textarea应该添加个hidden进行隐藏-->
+                <textarea style="display: none" id="prop" class="form-control" rows="5" name="row[prop]"
+                    cols="50">{$textarea}</textarea>
+            </dl>
+
+            <!-- 用于生成一个包含两个输入框和两个按钮的表单项 -->
+            <script id="basictpl" type="text/html">
+                <dd class="form-inline">
+                    <ins>
+                    <input readonly type="text" name="<%=name%>[<%=index%>][value]" class="form-control" value="<%=row.value%>" placeholder="属性名" size="20" />
+                    </ins>
+
+                    <ins>
+                    <input type="text" name="<%=name%>[<%=index%>][price]" class="form-control" value="<%=row.price%>" placeholder="附加价格" size="20" data-rule="required" required />
+                    </ins>
+
+                    <!--下面的两个按钮务必保留-->
+                    <!-- 删除 -->
+                    <span class="btn btn-sm btn-danger btn-remove"><i class="fa fa-times"></i></span>
+                    <!-- 移动 -->
+                    <span class="btn btn-sm btn-primary btn-dragsort"><i class="fa fa-arrows"></i></span>
+                </dd>
+            </script>
+        </div>
+    </div>
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-primary btn-embossed disabled">{:__('OK')}</button>
+            <button type="button" class="btn btn-default btn-embossed btn-close">{:__('Close')}</button>
+        </div>
+    </div>
+</form>

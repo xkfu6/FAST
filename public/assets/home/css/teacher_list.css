@@ -1,0 +1,99 @@
+.search {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+
+.mui-search:before {
+    top: 44%;
+}
+
+.mui-search .mui-placeholder {
+    background-color: white;
+    height: 49px;
+    line-height: 49px;
+}
+
+input[type=search] {
+    background-color: white;
+    height: 49px;
+    line-height: 49px;
+}
+
+
+#box {
+    height: 90vh;
+    overflow-y: scroll;
+}
+
+
+.list .item {
+    margin-bottom: 10px;
+}
+
+.list .item a {
+    display: flex;
+    background-color: #fff;
+    padding: 10px;
+}
+
+.list .item .avatar {
+    width: 35%;
+    margin-right: 10px;
+}
+
+.list .item .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.list .item .info {
+    width: 65%;
+}
+
+
+.list .item .title {
+    color: #333;
+    font-weight: bold;
+}
+
+.list .item .info p {
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.list .item .info .content {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+}
+
+.list .info .follow {
+    height: 20px;
+    line-height: 20px;
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.list .info .follow img {
+    width: 20px;
+    display: block;
+}
+
+.list .info .follow span {
+    display: block;
+    padding-top: 4px;
+    color: red;
+    margin-left: 5px;
+}
+
+.more {
+    line-height: 60px;
+    text-align: center;
+    color: #919191;
+}

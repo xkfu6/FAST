@@ -1,0 +1,160 @@
+<div>
+    <form id="add-form" class="form-horizontal form-ajax" role="form" data-toggle="validator" method="POST">
+        <div class="row">
+            <!-- 供应商 -->
+            <div class="col-md-4 col-xs-12 form-group">
+                <label for="supplierid" class="control-label col-xs-12 col-md-4 col-sm-4">供应商:</label>
+                <div class="col-md-8 col-sm-8 col-xs-12">
+                    <input type="text" class="form-control" id="ShowSupplier" data-toggle="modal"
+                        data-target="#ModelSupplier" placeholder="请选择供应商" required readonly
+                        value="{$row.supplier.name}" />
+                    <input type="hidden" id="supplierid" name="supplierid" value="{$row.supplierid}" required />
+                </div>
+            </div>
+            <!-- 供应商手机号 -->
+            <div class="col-md-4 col-xs-12 form-group">
+                <label class="control-label col-xs-12 col-md-4 col-sm-4">{:__('Mobile')}:</label>
+                <div class="col-md-8 col-sm-8 col-xs-12">
+                    <input class="form-control" readonly type="text" id="mobile" value="{$row.supplier.mobile}">
+                </div>
+            </div>
+            <!-- 供应商地址 -->
+            <div class="col-md-4 col-xs-12 form-group">
+                <label class="control-label col-xs-12 col-md-4 col-sm-4">供应商地址:</label>
+                <div class="col-md-8 col-sm-8 col-xs-12">
+                    <input class="form-control" readonly type="text" id="region" value="{$row.supplier.region_text}">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <!-- 交货方式 -->
+            <div class="col-md-4 col-xs-12 form-group">
+                <label class="control-label col-xs-12 col-md-4 col-sm-4">交货方式:</label>
+                <div class="col-md-8 col-sm-8 col-xs-12">
+                    {$typelist}
+                </div>
+            </div>
+
+            <!-- 总金额 -->
+            <div class="col-md-4 col-xs-12 form-group">
+                <label for="amount" class="control-label col-xs-12 col-md-4 col-sm-4">总金额:</label>
+                <div class="col-md-8 col-sm-8 col-xs-12">
+                    <input type="number" class="form-control" id="amount" name="amount" 
+                        data-rule="required;amount" placeholder="{:__('StorageAmount')}" value="{$row.amount}" required readonly />
+                </div>
+            </div>
+
+            <!-- 采购备注 -->
+            <div class="col-md-4 col-xs-12 form-group">
+                <label for="c-remark" class="control-label col-xs-12 col-md-4 col-sm-4">采购备注:</label>
+                <div class="col-md-8 col-sm-8 col-xs-12">
+                    <textarea id="c-remark" class="form-control" name="remark" placeholder="{:__('Remark')}"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-12 col-sm-12">
+                <div class="toolbar" class="toolbar">
+                    <a class="btn btn-success" data-toggle="modal" data-target="#ModelProduct">
+                        <i class="fa fa-plus"></i>{:__('Add')}
+                    </a>
+                </div>
+                <table id="table" class="table table-striped table-bordered table-hover table-nowrap text-center"
+                    width="100%">
+                    <thead>
+                        <th>ID</th>
+                        <th>商品名称</th>
+                        <th>商品库存</th>
+                        <th>商品数量</th>
+                        <th>商品单价</th>
+                        <th>商品总价</th>
+                        <th>{:__('Operate')}</th>
+                    </thead>
+                    <tbody id="TbodyProduct">
+                        {if condition="$product"}
+                        {foreach $product as $item}
+                        <tr data-proid="{$item.id}">
+                            <td>{$item.id}<input type="hidden" name="prolist[]" value="{$item.proid}" required /></td>
+                            <td>{$item.products.name}</td>
+                            <td>{$item.products.stock}</td>
+                            <td>
+                                <input class="text-center" type="number" min="1" name="nums[]" value="{$item.nums}"
+                                    onchange="Product.edit(this)" required placeholder="请输入商品数量"
+                                    data-rule="required;digits" />
+                            </td>
+                            <td>
+                                <input class="text-center" type="number" min="1" name="price[]" value="{$item.price}"
+                                    onchange="Product.price(this)" required placeholder="请输入商品单价" />
+                            </td>
+                            <td>
+                                <input class="text-center" type="number" min="1" name="total[]" value="{$item.total}"
+                                    onchange="Product.total(this)" required="" readonly="" placeholder="请输入商品合计"
+                                    data-rule="required">
+                            </td>
+                            <td>
+                                <a class="btn btn-danger" onclick="Product.del(this)" data-toggle="tooltip"
+                                    data-original-title="删除">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {/foreach}
+                        {/if}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="form-group layer-footer">
+            <label class="control-label col-xs-12 col-sm-2"></label>
+            <div class="col-xs-12 col-sm-8">
+                <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+                <button type="button" class="btn btn-default btn-embossed btn-close">{:__('Close')}</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<!-- 选择供应商弹出框 -->
+<!-- aria-labelledby="myModalLabel"：这个属性关联了一个id，这个id对应的元素将作为对话框的标题。 -->
+<div class="modal fade" id="ModelSupplier" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document" style="width:90%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">供应商</h4>
+            </div>
+            <div class="modal-body">
+                <div id="lays-row" class="row">
+                    <div id="ToolbarSupplier" class="toolbar">
+                        {:build_toolbar('refresh')}
+                    </div>
+                    <table id="TableSupplier" class="table table-striped table-bordered table-hover">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModelProduct" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document" style="width:90%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">供应商</h4>
+            </div>
+            <div class="modal-body">
+                <div id="lays-row" class="row">
+                    <div id="ToolbarProduct" class="toolbar">
+                        {:build_toolbar('refresh')}
+                    </div>
+                    <table id="TableProduct" class="table table-striped table-bordered table-hover">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

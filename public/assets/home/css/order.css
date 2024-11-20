@@ -1,0 +1,78 @@
+.tabs {
+    width: 100%;
+    background: #fff;
+    margin-bottom: 10px;
+}
+
+.tabs ul {
+    width: 100%;
+    display: flex;
+    overflow-x: scroll;
+    justify-content: space-around;
+}
+
+.tabs ul::-webkit-scrollbar {
+    height: 0;
+}
+
+.tabs li {
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    padding: 0 15px;
+}
+
+.tabs .active {
+    color: rgb(55, 68, 134);
+    font-weight: bold;
+    border-bottom: 3px solid rgb(55, 68, 134);
+}
+
+.list .item{
+    background: #fff;
+    margin-bottom: 10px;
+}
+
+.list .content {
+    display: flex;
+    padding: 10px;
+}
+
+.list .content .thumb{
+    width: 30%;
+    height: 90px;
+}
+
+.list .content .thumb img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.list .content .info{
+    font-size: 12px;
+    margin-left: 10px;
+    width: 70%;
+}
+
+.list .content .info span{
+    font-weight: bold;
+}
+
+.list .item .footer{
+    width: 100%;
+}
+
+.list .footer{
+    position: relative;
+    height: 40px;
+}
+
+.list .btn-list{
+    position: absolute;
+    right: 10px;
+}
+
+.list .footer button{
+    padding: 4px 20px;
+}

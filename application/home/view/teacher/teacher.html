@@ -1,0 +1,146 @@
+<link rel="stylesheet" href="/assets/home/plugin/mescroll/mescroll.min.css" />
+<script src="/assets/home/plugin/mescroll/mescroll.min.js"></script>
+
+<!-- 引入http请求插件 -->
+<script src="/assets/home/plugin/axios/axios.min.js"></script>
+<script src="/assets/home/plugin/axios/request.js"></script>
+
+<link rel="stylesheet" href="/assets/home/css/teacher_info.css">
+<div class="header">
+    <div class="left">
+        <div class="avatar">
+            <img src="{$teacher.avatar_text}" alt="">
+        </div>
+    </div>
+
+    <div class="right">
+        <div class="name">{$teacher.name}</div>
+        <div class="course">课程：{$teacher.subject_count}</div>
+        <div class="job">职位：{$teacher.job}</div>
+
+        <div class="follow">
+            <a href="{:url('/home/teacher/follow')}">粉丝：{$teacher.follow_count}</a>
+            <button class="btn {$teacher.follow_status ? 'mui-btn-danger' : 'mui-btn-primary'}">{$teacher.follow_status
+                ? '已关注' : '关注'}</button>
+        </div>
+    </div>
+</div>
+
+<div class="content">
+    {$teacher.content}
+</div>
+
+<div class="mui-input-row mui-search search wow">
+    <input type="search" placeholder="请输入名师名称" name="search" />
+</div>
+
+<!-- 课程列表 -->
+<div id="box">
+    <ul class="mui-table-view">
+    </ul>
+</div>
+
+<script>
+    new WOW({
+        boxClass: 'wow',      // 需要执行动画的元素的 class(默认是wow)
+        animateClass: 'animated fadeInDown', // animation.css 动画的 class(默认是animated)
+        offset: 0,          // 距离可视区域多少开始执行动画(默认为0)
+        mobile: true,       // 是否在移动设备上执行动画(默认为true)
+        live: true,       // 异步加载的内容是否有效(默认为true)
+        scrollContainer: "#box" // 可选滚动容器选择器，否则使用窗口
+    }).init();
+
+
+    var mescroll = new MeScroll('box', {
+        down: {
+            auto: false, //是否在初始化完毕之后自动执行下拉回调callback; 默认true
+            callback: downCallback //下拉刷新的回调
+        },
+        up: {
+            page: {
+                num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
+            },
+            auto: true, //是否在初始化时以上拉加载的方式自动加载第一页数据; 默认false
+            isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
+            callback: upCallback, //上拉回调,此处可简写; 相当于 callback: function (page) { upCallback(page); }
+            toTop: { //配置回到顶部按钮
+                duration: 300,
+                src: "/assets/home/plugin/mescroll/mescroll-totop.png", //默认滚动到1000px显示,可配置offset修改
+                offset: 100,
+                supportTap: true, //快速响应
+            }
+        }
+    })
+    let keyword = ''
+
+    function downCallback() {
+        $('#box ul').empty()
+        mescroll.resetUpScroll()
+    }
+    async function upCallback(res) {
+        let params = {
+            page: res.num,
+            keyword,
+        }
+        var result = await POST({
+            url: '/teacher/teacher',
+            params
+        })
+        if (!result) return false
+
+        if (result.code == 0) {
+            mui.toast(result.msg, { duration: 1000 })
+            // 暂无更多数据
+            mescroll.endBySize(0, 0)
+            return false
+        }
+
+        var list = result.data.list
+        console.log(list)
+        var count = result.data.count
+        //设置上拉加载状态
+        mescroll.endBySize(list.length, count)
+        FetchList(list)
+    }
+    function FetchList(list) {
+        for (var item of list) {
+            var temp = `
+                <li class="mui-table-view-cell mui-media wow" data-wow-delay="100ms">
+                    <a class="item" href="{:url('home/subject/info')}?subid=${item.id}">
+                        <div class="thumb">
+                            <img class="img" src="${item.thumbs_text}">
+                        </div>
+                        <div class="info">
+                            <h5 class="title">${item.title}</h5>
+                            <p class="content mui-ellipsis">课程分类：${item.category.title}</p>
+                            <p class="content mui-ellipsis">创建时间：${item.createtime_text}</p>
+                            <p class="bottom">
+                                <span class="like mui-icon mui-icon-starhalf">
+                                    <span>${item.likes_text}</span>
+                                </span>
+                                <span class="price">￥${item.price}元</span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+            `
+            $('#box ul').append(temp)
+        }
+    }
+    $('.follow .btn').click(async function () {
+        let params = {
+            teacherid: `{$teacher.id}`
+        }
+        let result = await POST({
+            url: '/teacher/follow',
+            params
+        })
+        mui.toast(result.msg, { duration: 1000 })
+        var follow = result.data.teacher_follow_status
+        $('.follow .btn').html(follow ? '已关注' : '关注')
+        $(".follow .btn").removeClass("mui-btn-danger");
+        $(".follow .btn").removeClass("mui-btn-primary");
+        $(".follow .btn").addClass(`${follow ? "mui-btn-danger" : "mui-btn-primary"}`);
+        $('.follow a').html(`粉丝：${result.data.count}`)
+    })
+</script>

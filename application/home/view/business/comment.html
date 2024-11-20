@@ -1,0 +1,53 @@
+<link rel="stylesheet" href="/assets/home/plugin/raty/raty.css" />
+<script src="/assets/home/plugin/raty/raty.min.js"></script>
+
+<link rel="stylesheet" href="/assets/home/css/comment.css" />
+
+<img src="" style="width:100%;" class="wow" />
+
+<div class="weui-cells__title wow" style="font-size:16px;" data-wow-delay="100ms">{$order.subject.title}</div>
+
+<form method="post">
+    <div class="weui-cells weui-cells_form wow" data-wow-delay="200ms">
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <textarea class="weui-textarea" placeholder="请输入内容" name="content" rows="3" {$order.comment.id
+                    ? "disabled" : "" }>{$order.comment.content}</textarea>
+            </div>
+        </div>
+    </div>
+    <div class="weui-cells weui-cells_form wow" data-wow-delay="300ms">
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <!-- 星级评价的 -->
+                <div id="raty" data-raty></div>
+                <input type="hidden" name="rate" value="" />
+            </div>
+        </div>
+    </div>
+    <div class="action wow" data-wow-delay="400ms">
+        {if condition="$order.comment.id"}
+        <button type="button" class="mui-btn mui-btn-warning">已评价</button>
+        {else /}
+        <button type="submit" class="mui-btn mui-btn-primary">立即提交</button>
+        {/if}
+    </div>
+</form>
+
+<script>
+    const raty = new Raty(document.getElementById('raty'), {
+        score: `{$order.comment.rate ? $order.comment.rate : 0}`,     //评分数目
+        starOn: "/assets/home/plugin/raty/images/star-on.png",        //满星的图片的地址
+        starOff: "/assets/home/plugin/raty/images/star-off.png",      //空星的图片的地址
+        starHalf: "/assets/home/plugin/raty/images/star-half.png",    //半星的图片的地址
+        readOnly: Boolean(`{$order.comment.id ? true : false}`),      //只读
+        halfShow: true,                          //显示半星
+        size: 10,                        //评分大小
+        click: function (score, element, evt) {
+            // console.log(score)
+            $("input[name=rate]").val(score)
+        }
+    });
+    raty.init();
+
+</script>

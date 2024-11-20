@@ -1,0 +1,33 @@
+.mui-search:before {
+    top: 44%;
+}
+
+.mui-search .mui-placeholder {
+    background-color: white;
+    height: 49px;
+    line-height: 49px;
+}
+
+input[type=search] {
+    background-color: white;
+    height: 49px;
+    line-height: 49px;
+}
+
+.mui-input-row.mui-search .mui-icon-clear {
+    top: 14px;
+}
+
+.list .item {
+    background-color: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.list .item div {
+    padding: 5px 0;
+}
+
+.list .item span {
+    font-weight: bold;
+}

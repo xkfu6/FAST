@@ -1,0 +1,69 @@
+<link rel="stylesheet" href="/assets/home/css/swiper-bundle.css" />
+<script src="/assets/home/js/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="/assets/home/css/coupon_info.css" />
+
+<div class="coupon_cover">
+    <img src="{$coupon.thumb_text}" />
+</div>
+
+<div class="coupon_detail">
+    <div class="coupon_info wow">
+        <div class="left">
+            <div class="left_top">
+                <div>
+                    <span>{$coupon.rate *100}</span>折
+                </div>
+                <div class="top_info">
+                    <div>{$coupon.title}</div>
+                    <div>COUPON</div>
+                </div>
+            </div>
+        </div>
+        <div class="receive">
+            {if condition = "$isbut"}
+            <a type="button" class="mui-btn" disabled>已领取</a>
+            {else/}
+            <a href="{:url('home/coupon/receive')}?cid={$coupon.id}" type="button"
+                class="mui-btn mui-btn-warning  ">立即领取</a>
+            {/if}
+
+
+        </div>
+    </div>
+    <div class="coupon_prompt wow" data-wow-delay="100ms">
+        <div class="prompt_title">温馨提示：</div>
+        <div><span>•</span>活动开始时间：{$coupon.createtime_text}</div>
+        <div><span>•</span>活动结束时间：{$coupon.endtime_text}</div>
+        <div><span>•</span>数量：{$coupon.total}张，每人限领1张，赶快领取吧！</div>
+    </div>
+</div>
+<div class="swiper wow CouponList">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide">！XXXX 用户 在 2024-10-09 领取优惠券</div>
+        <div class="swiper-slide">！XXXX 用户 在 2024-10-09 领取优惠券</div>
+        <div class="swiper-slide">！XXXX 用户 在 2024-10-09 领取优惠券</div>
+        <div class="swiper-slide">！XXXX 用户 在 2024-10-09 领取优惠券</div>
+        <div class="swiper-slide">！XXXX 用户 在 2024-10-09 领取优惠券</div>
+    </div>
+</div>
+<!-- 底部 -->
+{include file="common/footer" /}
+
+<script>
+    var swiper = new Swiper(".CouponList", {
+        direction: "vertical",
+        loop: true,
+        autoplay: {
+            delay: 1000,
+        },
+    });
+    new WOW({
+        boxClass: 'wow',      // 需要执行动画的元素的 class(默认是wow)
+        animateClass: 'animated fadeInDown', // animation.css 动画的 class(默认是animated)
+        offset: 0,          // 距离可视区域多少开始执行动画(默认为0)
+        mobile: true,       // 是否在移动设备上执行动画(默认为true)
+        live: true,       // 异步加载的内容是否有效(默认为true)
+        scrollContainer: null // 可选滚动容器选择器，否则使用窗口
+    }).init();
+</script>

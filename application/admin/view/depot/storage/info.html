@@ -1,0 +1,69 @@
+<div class="panel panel-default panel-intro">
+    <div class="panel-body">
+        <table class="table table-striped table-bordered table-hover table-nowrap">
+            <tr>
+                <td>单号编号：</td>
+                <td>{$row.code|htmlentities}</td>
+                <td>入库单类型：</td>
+                <td>{$row.type_text|htmlentities}</td>
+                <td>入库单状态：</td>
+                <td>{$row.status_text|htmlentities}</td>
+            </tr>
+
+            <tr>
+                <td>制单日期</td>
+                <td>{$row.createtime|htmlentities}</td>
+                <td>总价：</td>
+                <td>{$row.amount|htmlentities}</td>
+                <td>备注：</td>
+                <td>{$row.remark|htmlentities}</td>
+            </tr>
+
+            {if($supplier)}
+            <tr>
+                <td>供应商：</td>
+                <td>{$supplier.name|htmlentities}</td>
+                <td>联系方式：</td>
+                <td>{$supplier.mobile|htmlentities}</td>
+                <td>详细地址：</td>
+                <td>{$supplier.region_text|htmlentities} {$supplier.address|htmlentities}</td>
+            </tr>
+            {/if}
+                
+            <tr>
+                {if($row.adminid)}
+                    <td>入库人员:</td>
+                    <td>{$row.admin.nickname|htmlentities}</td>
+                {/if}
+                {if($row.reviewerid)}
+                    <td>审核人员:</td>
+                    <td>{$row.reviewer.nickname|htmlentities}</td>
+                {/if}
+            </tr>
+        </table>
+    </div>
+    <div class="panel-body">
+        <table class="table table-striped table-bordered table-hover table-nowrap text-center">
+            <tr>
+                <th>ID</th>
+                <th>商品名称</th>
+                <th>单位</th>
+                <th>商品单价</th>
+                <th>数量</th>
+                <th>小计</th>
+                <th>商品分类</th>
+            </tr>
+            {foreach $prolist as $item}
+                <tr>
+                    <td>{$item.product.id}</td>
+                    <td>{$item.product.name}</td>
+                    <td>{$item.product.unit.name}</td>
+                    <td>{$item.price}</td>
+                    <td>{$item.nums}</td>
+                    <td>{$item.total}</td>
+                    <td>{$item.product.type.name}</td>
+                </tr>
+            {/foreach}
+        </table>
+    </div>
+</div>

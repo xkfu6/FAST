@@ -1,0 +1,113 @@
+﻿.user {
+    width: 100%;
+    padding: 40px 0px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(#0173de, #4ea9f5);
+    color: white;
+}
+
+.user .avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.user .nickname {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+/* 菜单 */
+.menulist {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.commonly-used{
+    width: 100%;
+    background-color: #fff;
+    padding: 0 10px;
+}
+
+.commonly-used .title{
+    padding: 10px 0;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.commonly-used .list{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.commonly-used .list .item{
+    width: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 10px 0;
+}
+
+.commonly-used .list .item img{
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+}
+
+.commonly-used .list .item .name{
+    font-size: 12px;
+    color: #333;
+    margin-top: 5px;
+}
+
+.promotion{
+    width: 100%;
+    background-color: #fff;
+    padding: 0 10px;
+    margin-top: 10px;
+}
+
+.promotion .title{
+    padding: 10px 0;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.promotion .list{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.promotion .list .item{
+    width: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 10px 0;
+}
+
+.promotion .list .item img{
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+}
+
+.promotion .list .item .name{
+    font-size: 12px;
+    color: #333;
+    margin-top: 5px;
+}

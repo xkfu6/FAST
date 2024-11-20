@@ -1,0 +1,184 @@
+<div class="panel panel-default panel-intro">
+    <!-- 选项卡的头部 -->
+    <div class="panel-heading">
+        <ul class="nav nav-tabs">
+            <!-- href="#锚点id"   id="锚点" -->
+            <li class="active"><a href="#info" data-toggle="tab">客户资料</a></li>
+            <li><a href="#receive" data-toggle="tab">领取记录</a></li>
+            <li><a href="#visit" data-toggle="tab">回访列表</a></li>
+            <li><a href="#record" data-toggle="tab">消费记录</a></li>
+            <li><a href="#subject" data-toggle="tab">课程订单</a></li>
+            <li><a href="#coupon" data-toggle="tab">优惠券</a></li>
+            <li><a href="#commission" data-toggle="tab">提现记录</a></li>
+            <li><a href="#address" data-toggle="tab">收货地址</a></li>
+        </ul>
+    </div>
+
+
+    <!-- 选项卡内容 -->
+    <div class="panel-body">
+        <div id="myTabContent" class="tab-content">
+            <!-- 个人资料  -->
+            <div class="tab-pane fade active in" id="info">
+                <div class="panel-body newrow prindBody">
+                    <div class="col-md-4 col-xs-12 form-group">
+                        <label class="control-label col-xs-12 col-sm-3">{:__('BusinessNickname')}:</label>
+                        <div class="col-xs-12 col-sm-6">
+                            {$row.nickname}
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-xs-12 form-group">
+                        <label class="control-label col-xs-12 col-sm-3">{:__('BusinessMobile')}:</label>
+                        <div class="col-xs-12 col-sm-6">
+                            {$row.mobile}
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-xs-12 form-group">
+                        <label class="control-label col-xs-12 col-sm-3">{:__('Email')}:</label>
+                        <div class="col-xs-12 col-sm-6">
+                            {$row.email ? $row.email : '暂无邮箱'}
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-xs-12 form-group">
+                        <label class="control-label col-xs-12 col-sm-3">{:__('Gender')}:</label>
+                        <div class="col-xs-12 col-sm-6">
+                            {$row.gender_text}
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-xs-12 form-group">
+                        <label class="control-label col-xs-12 col-sm-3">{:__('Money')}:</label>
+                        <div class="col-xs-12 col-sm-6">
+                            {$row.money}
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-xs-12 form-group">
+                        <label class="control-label col-xs-12 col-sm-3">{:__('BusinessSource')}:</label>
+                        <div class="col-xs-12 col-sm-6">
+                            {$row.source.name ? $row.source.name : '未知来源'}
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-xs-12 form-group">
+                        <label class="control-label col-xs-12 col-sm-3">{:__('BusinessDeal')}:</label>
+                        <div class="col-xs-12 col-sm-6">
+                            {$row.deal_text}
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-xs-12 form-group">
+                        <label class="control-label col-xs-12 col-sm-3">{:__('BusinessAuth')}:</label>
+                        <div class="col-xs-12 col-sm-6">
+                            {$row.auth == 1 ? '已认证' : '未认证'}
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-xs-12 form-group">
+                        <label class="control-label col-xs-12 col-sm-3">{:__('Area')}:</label>
+                        <div class="col-xs-12 col-sm-6">
+                            {$row.region_text}
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-xs-12 form-group">
+                        <label class="control-label col-xs-12 col-sm-3">{:__('Createtime')}:</label>
+                        <div class="col-xs-12 col-sm-6">
+                            {$row.createtime}
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-xs-12 form-group">
+                        <label class="control-label col-xs-12 col-sm-3">{:__('BusinessApply')}:</label>
+                        <div class="col-xs-12 col-sm-6">
+                            {$row.admin.nickname ? $row.admin.nickname : ''}
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-xs-12 form-group">
+                        <label class="control-label col-xs-12 col-sm-3">{:__('Avatar')}:</label>
+                        <div class="col-xs-12 col-sm-6">
+                            <img src="{$row.avatar_text}" width="100" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- 领取记录 -->
+            <div class="tab-pane fade active in" id="receive">
+                <div class="widget-body no-padding">
+                    <!-- 工具栏 -->
+                    <div id="ReceiveToolbar" class="toolbar"></div>
+                    <!-- 表格 -->
+                    <table id="ReceiveTable" class="table table-striped table-bordered table-hover table-nowrap"
+                        width="100%">
+                    </table>
+                </div>
+            </div>
+            <!-- 回访记录 -->
+            <div class="tab-pane fade" id="visit">
+                <div class="widget-body no-padding">
+                    <!-- 工具栏 -->
+                    <div id="VisitToolbar" class="toolbar">
+                        {:build_toolbar('refresh,add')}
+                    </div>
+
+                    <!-- 表格 -->
+                    <table id="VisitTable" class="table table-striped table-bordered table-hover table-nowrap"
+                        data-operate-edit="{:$auth->check('business/visit/edit')}"
+                        data-operate-del="{:$auth->check('business/visit/del')}" width="100%">
+                    </table>
+                </div>
+            </div>
+            <!-- 消费记录 -->
+            <div class="tab-pane fade" id="record">
+                <div class="widget-body no-padding">
+                    <!-- 工具栏 -->
+                    <div id="RecordToolbar" class="toolbar"></div>
+                    <!-- 表格 -->
+                    <table id="RecordTable" class="table table-striped table-bordered table-hover table-nowrap"
+                        width="100%">
+                    </table>
+                </div>
+            </div>
+            <!-- 课程订单 -->
+            <div class="tab-pane fade" id="subject">
+                <div class="widget-body no-padding">
+                    <!-- 工具栏 -->
+                    <div id="SubjectToolbar" class="toolbar"></div>
+                    <!-- 表格 -->
+                    <table id="SubjectTable" class="table table-striped table-bordered table-hover table-nowrap"
+                        width="100%">
+                    </table>
+                </div>
+            </div>
+            <!-- 优惠券 -->
+            <div class="tab-pane fade" id="coupon">
+                <div class="widget-body no-padding">
+                    <!-- 工具栏 -->
+                    <div id="CouponToolbar" class="toolbar"></div>
+                    <!-- 表格 -->
+                    <table id="CouponTable" class="table table-striped table-bordered table-hover table-nowrap"
+                        width="100%">
+                    </table>
+                </div>
+            </div>
+            <!-- 提现记录 -->
+            <div class="tab-pane fade" id="commission">
+                <div class="widget-body no-padding">
+                    <!-- 工具栏 -->
+                    <div id="CommissionToolbar" class="toolbar"></div>
+                    <!-- 表格 -->
+                    <table id="CommissionTable" class="table table-striped table-bordered table-hover table-nowrap"
+                        width="100%">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

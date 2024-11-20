@@ -1,0 +1,106 @@
+.coupon_tabs {
+    width: 100%;
+    background: #fff;
+    margin-bottom: 10px;
+}
+
+.coupon_tabs ul{
+    width: 100%;
+    display: flex;
+    overflow-x: scroll;
+}
+
+.coupon_tabs ul::-webkit-scrollbar {
+    height: 0;
+}
+
+.coupon_tabs li {
+    width: 20%;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.coupon_tabs .active {
+    color: rgb(55, 68, 134);
+    font-weight: bold;
+    border-bottom: 3px solid rgb(55, 68, 134);
+}
+
+.coupon_list .coupon_item{
+    background-color: #fff;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.coupon_list .coupon_item .item_content a{
+    padding: 16px;
+    border-right: 1px dashed #ddd;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: #303133;
+}
+
+.coupon_list .coupon_item .item_content .left {
+    width: 80px;
+    font-size: 40px;
+    font-weight: 700;
+    color: #e74c3c;
+}
+
+.coupon_list .coupon_item .item_content .left  span {
+    font-size:12px;
+}
+
+.coupon_list .coupon_item .item_content .right{
+    max-width: 200px;
+    width: 200px;
+}
+
+.coupon_list .coupon_item .item_content .right div{
+    margin-bottom: 2px;
+    font-size: 16px;
+}
+
+.coupon_list .coupon_item .item_content .right div:nth-child(2){
+    color: #909399;
+    font-size: 14px;
+}
+
+.coupon_list .coupon_item .item_content .right div:nth-child(2) span{
+    color: rgb(55, 68, 134);
+}
+
+.coupon_list .coupon_item .item_content .right div:nth-child(3), .coupon_list .coupon_item .item_content .right div:nth-child(4){
+    color: #909399;
+    font-size: 12px;
+}
+
+.coupon_list .coupon_item .item_btn{
+    font-size: 14px;
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    border: 1px solid #f7f7f7;
+    width: 100%;
+}
+
+.coupon_list .coupon_item .item_btn .right_btn{
+    color: rgba(0,0,0,.3);
+    background-color: #f7f7f7;
+    display: inline-flex;
+    width: auto;
+    font-size: 11px;
+    height: 26px;
+    line-height: 26px;
+    padding: 0 10px;
+    border-radius: 5px;
+    border: 1px solid rgba(0,0,0,.3);
+}

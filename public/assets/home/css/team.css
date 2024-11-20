@@ -1,0 +1,63 @@
+.search {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+
+.mui-search:before {
+    top: 44%;
+}
+
+.mui-search .mui-placeholder {
+    background-color: white;
+    height: 49px;
+    line-height: 49px;
+}
+
+input[type=search] {
+    background-color: white;
+    height: 49px;
+    line-height: 49px;
+}
+
+
+#box {
+    height: 90vh;
+    overflow-y: scroll;
+}
+
+
+.list .item{
+    display: flex;
+    background-color: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.list .item .avatar{
+    width: 30%;
+}
+
+.list .item img{
+    width: 100%;
+}
+
+.list .item .info{
+    margin-left: 10px;
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+}
+
+.list .item .info .name{
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.list .item .info .type{
+    font-weight: bold;
+    margin-bottom: 15px;
+}

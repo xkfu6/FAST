@@ -1,0 +1,128 @@
+<!-- picker选择器 -->
+<link rel="stylesheet" href="/assets/home/plugin/mui/mui.picker.css" />
+<link rel="stylesheet" href="/assets/home/plugin/mui/mui.poppicker.css" />
+<script src="/assets/home/plugin/mui/mui.picker.js"></script>
+<script src="/assets/home/plugin/mui/mui.poppicker.js"></script>
+<link rel="stylesheet" href="/assets/home/css/confirm.css" />
+
+<body>
+    <form method="post">
+        <div class="course wow">
+            <div class="left">
+                <div class="thumb">
+                    <img src="/assets/home/images/video2.png" alt="">
+                </div>
+            </div>
+            <div class="right">
+                <div class="name">{$subject.title}</div>
+                <div class="teacher">授课老师：{$subject.teacher.name}</div>
+                <div class="type">课程分类：{$subject.category.name}</div>
+            </div>
+        </div>
+
+        <div class="coupon-info wow" data-wow-delay="100ms">
+            <div class="text">
+                优惠券：
+            </div>
+            <a href="javascript:void(0)">
+                <div class="coupon">
+                    <!-- 抵扣￥0元 <span>></span> -->
+                    暂无优惠券 <span>></span>
+                </div>
+                <input type="hidden" name="coupon" value="" />
+            </a>
+        </div>
+
+        <div class="price-info wow" data-wow-delay="200ms">
+            <div class="text">
+                课程价格：
+            </div>
+            <div class="price">
+                ￥{$subject.price}
+            </div>
+        </div>
+
+        <div class="pay-info wow" data-wow-delay="300ms">
+            <div class="text">支付方式：</div>
+            <div class="pay">余额支付</div>
+            <input type="hidden" name="pay" value="money" />
+        </div>
+
+        <div class="footer wow" data-wow-delay="400ms">
+            <div class="total">
+                总价：<span id="total">￥{$subject.price}</span>
+            </div>
+            <button class="btn">提交</button>
+        </div>
+    </form>
+
+    <script>
+        new WOW({
+            boxClass: 'wow',      // 需要执行动画的元素的 class(默认是wow)
+            animateClass: 'animated fadeInDown', // animation.css 动画的 class(默认是animated)
+            offset: 0,          // 距离可视区域多少开始执行动画(默认为0)
+            mobile: true,       // 是否在移动设备上执行动画(默认为true)
+            live: true,       // 异步加载的内容是否有效(默认为true)
+            scrollContainer: null // 可选滚动容器选择器，否则使用窗口
+        }).init();
+
+        // 优惠卷参数
+        var coupon = `{$coupon}`
+
+        try {
+            coupon = JSON.parse(coupon) ? JSON.parse(coupon) : []
+        } catch (err) {
+            coupon = []
+        }
+        if (coupon.length <= 0) {
+            $(".coupon").text('暂无优惠券')
+        }
+
+        $(".coupon").click(function () {
+            //组装数据
+            var data = []
+            coupon.map((selectItems) => {
+                data.push({
+                    value: selectItems.id,
+                    rate: selectItems.coupon.rate,
+                    text: `【优惠活动：${selectItems.coupon.title}】 ${selectItems.coupon.rate * 100} 折`
+                })
+            })
+            //选择器
+            var picker = new mui.PopPicker();
+
+            //设置数据
+            picker.setData(data);
+            picker.show(function (selectItems) {
+                $('.coupon').html(selectItems[0].text)
+                $("input[name=coupon]").val(selectItems[0].value)
+                var rate = selectItems[0].rate
+                rate = parseFloat(rate)
+                var price = `{$subject.price}`
+                price = parseFloat(price)
+                var total = price * rate
+                total = total.toFixed(2)
+                //覆盖到div上
+                $("#total").html(total)
+            })
+        })
+
+        // 支付方式
+        $(".pay").click(function () {
+            //创建选择器
+            var picker = new mui.PopPicker();
+
+            //设置下拉数据
+            picker.setData([
+                { value: 'money', text: '余额支付' },
+                { value: 'wx', text: '微信支付' },
+                { value: 'zfb', text: '支付宝' },
+            ]);
+
+            //点击确认的回调
+            picker.show(function (item) {
+                $(".pay").text(item[0].text)
+                $("input[name=pay]").val(item[0].value)
+            })
+        })
+    </script>

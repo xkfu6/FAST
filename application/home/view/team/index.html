@@ -1,0 +1,115 @@
+<!-- mescroll -->
+<link rel="stylesheet" href="/assets/home/plugin/mescroll/mescroll.min.css" />
+<script src="/assets/home/plugin/mescroll/mescroll.min.js"></script>
+
+<!-- 引入http请求插件 -->
+<script src="/assets/home/plugin/axios/axios.min.js"></script>
+<script src="/assets/home/plugin/axios/request.js"></script>
+
+
+<link rel="stylesheet" href="/assets/home/css/team.css" />
+<!-- 搜索框 -->
+<div class="mui-input-row mui-search search wow">
+    <input type="search" placeholder="请输入要查找的用户名称" name="search" />
+</div>
+
+<div id="box">
+    <div class="list"></div>
+</div>
+
+{literal}
+<script>
+    new WOW({
+        boxClass: 'wow',      // 需要执行动画的元素的 class(默认是wow)
+        animateClass: 'animated fadeInDown', // animation.css 动画的 class(默认是animated)
+        offset: 0,          // 距离可视区域多少开始执行动画(默认为0)
+        mobile: true,       // 是否在移动设备上执行动画(默认为true)
+        live: true,       // 异步加载的内容是否有效(默认为true)
+        scrollContainer: "#box" // 可选滚动容器选择器，否则使用窗口
+    }).init();
+
+    // 设置关键词
+    var keywords = '';
+    //获取关键词
+    $("input[name=search]").change(function () {
+        keywords = $.trim($(this).val())
+        downCallback()
+    })
+
+    var mescroll = new MeScroll('box', {
+        down: {
+            auto: false,
+            callback: downCallback //下拉刷新的回调,别写成downCallback(),多了括号就自动执行方法了
+        },
+        up: {
+            auto: true,
+            isBounce: false,
+            callback: upCallback,
+            page: {
+                num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
+                size: 10 //每页数据条数,默认10
+            },
+            toTop: {
+                //回到顶部按钮
+                // 动画过渡的时间
+                duration: 300,
+                src: "/assets/home/plugin/mescroll/mescroll-totop.png", //图片路径,默认null,支持网络图
+                offset: 100, //列表滚动1000px才显示回到顶部按钮
+                supporTap: true	//快速响应
+                /*
+                默认未false
+                supportTap: 如果您的运行环境支持tap,则可配置true,可减少点击延时,快速响应事件;默认false,通过onclick添加点击事件; (v 1.3.0 新增) (注:微信和PC无法响应tap事件)
+                btnClick: 点击按钮的回调; 提示: 如果在回调里return true, 将不执行回到顶部的操作
+                */
+            },
+        }
+    })
+
+    // 下拉动作
+    function downCallback() {
+        // 清除原来里面的内容再刷新
+        $('#box .list').empty();
+        //重置下拉动作，让分页回到第一页
+        mescroll.resetUpScroll()
+    }
+
+    // 上拉动作用异步来执行
+    async function upCallback(res) {
+        // 当前的页面数
+        var page = res.num
+        // 发送请求
+        var result = await POST({ url: '/team/index', params: { page, keywords } })//page当前的页面数传入,keywords把关键字传入
+        if (result.code == 0) {
+            mui.toast(result.msg)
+            // 结束下拉刷新
+            return mescroll.endErr();
+        }
+        //拿到数据
+        var list = result.data.list
+        var count = result.data.count
+        console.log(list.length)
+        //下拉状态设定
+        mescroll.endBySize(list.length, count) //根据这两个参数来判断是否到达结尾处
+        Fleshtml(list)
+    }
+    function Fleshtml(list) {
+        var html = ''
+
+        for (var item of list) {
+            html += `        
+            <div class="item wow" data-wow-delay="100ms">
+            <div class="avatar">
+                <img src="${item.avatar_text}" alt="">
+            </div>
+            <div class="info">
+                <div class="name">名称：${item.nickname}</div>
+                <div class="type">手机号：${item.mobile}</div>
+                <div class="time">创建时间:${item.createtime_text}</div>
+            </div>
+        </div>
+            `
+        }
+        $("#box .list").append(html)
+    }
+</script>
+{/literal}

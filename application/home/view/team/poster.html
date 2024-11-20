@@ -1,0 +1,35 @@
+<link rel="stylesheet" href="/assets/home/css/poster.css">
+<div class="content">
+    <div class="poster wow">
+        <!-- <img id="poster" src="/assets/home/images/poster-back.png" alt="点击按钮重新生成海报"> -->
+        <img id="poster" src="{$AutoLogin.poster_text}" alt="点击按钮重新生成海报">
+    </div>
+    <div class="link wow" data-wow-delay="100ms">
+        <input type="text" placeholder="普通输入框" readonly="" id="url" value="{$link}">
+        <button class="mui-btn mui-btn-primary" type="button" id="btn">点击复制</button>
+    </div>
+
+    <div class="update wow" data-wow-delay="200ms">
+        <button class="mui-btn mui-btn-success" type="button" id="update">重新生成海报</button>
+    </div>
+</div>
+<script src="/assets/home/plugin/axios/axios.min.js"></script>
+<script src="/assets/home/plugin/axios/request.js"></script>
+<script>
+    $('#btn').on('click', function () {
+        var url = document.getElementById('url');
+        url.select()//选中里面的文本值
+        //执行复制
+        document.execCommand('Copy') && mui.toast('已经复制到剪切板');
+    })
+    $('#update').click(async function () {
+        console.log(111)
+        {literal}
+        var result = await POST({ url: `team/poster` })
+        //提醒
+        mui.toast(result.msg)
+        console.log(`${result.data}`)
+        if (result.code) $("#poster").prop('src', `${result.data}?${Math.random()}`)
+        {/literal}
+    })
+</script>

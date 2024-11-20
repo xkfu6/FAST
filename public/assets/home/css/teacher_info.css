@@ -1,0 +1,153 @@
+.header {
+    display: flex;
+    background: #fff;
+    padding: 10px;
+}
+
+.header .left {
+    width: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header .left .avatar {
+    width: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.header .right {
+    width: 60%;
+    /* line-height: 2; */
+}
+
+.header .right .name {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.header .right span{
+    display: block;
+    margin: 5px 0;
+}
+
+.header .right .follow{
+    margin-top: 5px;
+}
+
+.header .right .follow .btn{
+    height: 100%;
+    padding: 2px 15px;
+}
+
+body>.content {
+    background: #fff;
+    margin-top: 10px;
+    text-indent: 2em;
+    padding: 10px;
+    margin-bottom:20px;
+}
+
+
+.mui-search:before {
+    top: 44%;
+}
+
+.mui-search .mui-placeholder {
+    background-color: white;
+    height: 49px;
+    line-height: 49px;
+}
+
+input[type=search] {
+    background-color: white;
+    height: 49px;
+    line-height: 49px;
+    margin-bottom:0;
+}
+
+#box {
+    height: calc(65vh);
+    overflow-y: scroll;
+}
+
+
+.mui-table-view {
+    margin-top: 10px;
+}
+
+.mui-media a {
+    width: 100%;
+    display: flex !important;
+    justify-content: left;
+    align-items: stretch;
+    align-content: stretch;
+    margin: 0 !important;
+    padding: 0 !important;
+
+}
+
+.thumb {
+    flex-shrink: 0;
+    width: 50%;
+    margin-right: 2%;
+    height: 120px;
+}
+
+.thumb .img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.info {
+    width: 50%;
+    padding-top: 2px;
+}
+
+.info>* {
+    width: 100%;
+}
+
+.info .title {
+    color: #000;
+    width: 100%;
+    font-weight: bold;
+    font-size: 1em;
+    margin: 0;
+}
+
+.info .content {
+    color: #8f8f94;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.info .bottom {
+    display: flex;
+    justify-content: space-between;
+    align-content: stretch;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.info .like {
+    color: skyblue;
+}
+
+.info .like span {
+    font-size: 14px;
+}
+
+.info .price {
+    font-size: 14px;
+    color: red;
+    font-weight: bold;
+}
+
+.more {
+    line-height: 60px;
+    text-align: center;
+    color: #919191;
+}

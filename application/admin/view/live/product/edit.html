@@ -1,0 +1,42 @@
+<form id="add-form" class="form-horizontal" role="form" data-toggle="validator" method="POST">
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Type')}:</label>
+        <div class="col-xs-12 col-sm-8">{$typelist}</div>
+    </div>
+
+    <div class="form-group" id="sublist" {$row['type']=='subject' ? 'style="display: block;"' : 'style="display: none;"'
+        }>
+        <label class="control-label col-xs-12 col-sm-2">{:__('Relation')}:</label>
+        <div class="col-xs-12 col-sm-8">{$sublist}</div>
+    </div>
+
+    <div class="form-group" id="prolist" {$row['type']=='product' ? 'style="display: block;"' : 'style="display: none;"'
+        }>
+        <label class="control-label col-xs-12 col-sm-2">{:__('Relation')}:</label>
+        <div class="col-xs-12 col-sm-8">{$prolist}</div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Stock')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-stock" min="10" class="form-control" name="row[stock]" type="number"
+                placeholder="{:__('Stock')}" data-rule="required;" value="{$row.stock}" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Price')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-price" min="0" class="form-control" step="0.01" name="row[price]" type="number"
+                data-rule="required;" value="{$row.price}">
+        </div>
+    </div>
+
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+            <button type="button" class="btn btn-primary btn-embossed btn-close">{:__('Close')}</button>
+        </div>
+    </div>
+</form>
