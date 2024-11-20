@@ -18,9 +18,9 @@ return [
     // 服务器地址
     'hostname'        => Env::get('database.hostname', '127.0.0.1'),
     // 数据库名
-    'database'        => Env::get('database.database', 'fast'),
+    'database'        => Env::get('database.database', 'xkfu_fast'),
     // 用户名
-    'username'        => Env::get('database.username', 'root'),
+    'username'        => Env::get('database.username', 'xkfu_fast'),
     // 密码
     'password'        => Env::get('database.password', 'root'),
     // 端口
