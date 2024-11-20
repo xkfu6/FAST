@@ -28,7 +28,7 @@ class Live extends Controller
             $product = $this->LiveProductModel->with(['subjects', 'products'])->where(['liveid' => $live['id'], 'type' => 'product'])->select();
 
             $data = [
-                'live' => $live['url_text'],
+                'live' => $live['url'],
                 'product' => $product
             ];
             $this->success('查询成功', null, $data);
