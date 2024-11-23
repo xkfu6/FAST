@@ -7,4 +7,13 @@
         live: true,       // 异步加载的内容是否有效(默认为true)
         scrollContainer: null // 可选滚动容器选择器，否则使用窗口
     }).init();
+    console.log(location.pathname);
+    $('.footer-bar .tab-item').each(function (index, item) {
+        var url = $(item).find('a').attr('href')
+        console.log(url)
+        if (location.pathname == url) {
+            // console.log(111)
+            $(item).addClass('mui-active').siblings().removeClass('mui-active')
+        }
+    });
 </script>
