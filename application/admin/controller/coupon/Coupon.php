@@ -75,7 +75,7 @@ class Coupon extends Backend
             $name['endtime'] = strtotime($name['endtime']);
             if ($name) {
                 $name['id'] = $ids;
-                $list = $this->model->validate('common/coupon/Coupon')->isUpdate(true)->save($name);
+                $list = $this->model->validate('common/Coupon/Coupon')->isUpdate(true)->save($name);
                 if ($list) {
                     $this->success();
                     exit;
