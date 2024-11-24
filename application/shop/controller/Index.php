@@ -21,7 +21,7 @@ class Index extends Controller
         $coupon = $this->CouponModel->where(['status' => '1'])->select();
 
         //新品
-        $news = $this->ProductModel->where(['flag' => '1'])->limit(8)->select();
+        $news = $this->ProductModel->where(['flag' => '1', 'status' => '1'])->limit(8)->select();
 
         $data = [
             'coupon' => $coupon,

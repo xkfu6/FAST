@@ -72,6 +72,8 @@ class Product extends Controller
             if ($flag != "0") {
                 $where['flag'] = $flag;
             }
+            //是否下架判断筛选
+            $where['status'] = '1';
 
             $list = $this->ProductModel
                 ->where($where)
@@ -258,13 +260,14 @@ class Product extends Controller
             }
         }
     }
+    // 分类右边商品
     public function commodity()
     {
         $typenum = $this->request->param('id', 0, 'trim');
         $list = $this->TypeModel->select();
         $typeid = $list[$typenum]['id'];
 
-        $product = $this->ProductModel->where(['typeid' => $typeid])->select();
+        $product = $this->ProductModel->where(['typeid' => $typeid, 'status' => '1'])->select();
         $data = [
             $product,
             $typenum
@@ -274,6 +277,22 @@ class Product extends Controller
             exit;
         } else {
             $this->error('没有更多数据');
+            exit;
+        }
+    }
+
+    // 商品排行
+    public function rank()
+    {
+        $pare = $this->request->param('page', 1, 'trim');
+        $limit = 8; //每页显示的个数
+        $offset = ($pare - 1) * $limit; //分页起始位置
+        $result = $this->ProductModel->limit($offset, $limit)->order('id desc')->where(['status' => '1'])->select();
+        if ($result) {
+            $this->success('查询成功', null, $result);
+            exit;
+        } else {
+            $this->error('查询失败');
             exit;
         }
     }
