@@ -20,7 +20,7 @@ class Guest extends Model
     {
         $gender = $data['gender'] ? $data['gender'] : 0;
 
-        $list = ['0' => '女', '1' => '男'];
+        $list = ['0' => '保密', '1' => '男', '2' => '女'];
 
         return $list[$gender];
     }

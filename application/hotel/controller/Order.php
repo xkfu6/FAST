@@ -13,7 +13,7 @@ class Order extends Controller
         parent::__construct();   
 
         $this->BusinessModel = model('Business.Business');
-        $this->PayModel = model('Pay.Pay');
+        $this->PayModel = model('common/Pay/Pay');
 
         $this->CouponModel = model('Coupon.Coupon');
         $this->ReceiveModel = model('Coupon.Receive');
@@ -51,65 +51,30 @@ class Order extends Controller
             
             $third = json_encode(['orderid' => $orderid]);
 
-            //获取域名部分
-            $host = Request::instance()->domain();
-            $host = trim($host, '/');
-
-            //完整的请求接口地址
-            $api = $host."/pay/index/create";
-
-            //异步通知的回调地址
-            $callbackurl = $host.'/hotel/order/callback';
-
-            // 成功支付后跳转的地址
-            $reurl = "/order/info?orderid=$orderid";
-
-            //微信收款码
-            $wxcode = config('site.wxcode') ? config('site.wxcode') : '';
-            $wxcode = $host.$wxcode;
-
-            //支付宝收款码
-            $zfbcode = config('site.zfbcode');
-            $zfbcode = $host.$zfbcode;
 
             //组装参数
             $data = [
-                'name' => '酒店预订',
-                'third' => $third,
-                'originalprice' => $order['price'],
-                'paypage' => '0',  //我们没有用收银台界面 纯粹返回json的结果
-                'reurl' => $reurl,
-                'callbackurl' => $callbackurl,
-                'wxcode' => $wxcode,
-                'zfbcode' => $zfbcode,
+                'name' => '酒店订单', //标题
+                'third' => $third, //传递的第三方的参数
+                'total' => $order['price'], //订单原价充值的价格
+                'type' => $order['type'], //支付方式
+                'cashier' => 0, //不需要收银台界面
+                'jump' => "/order/info?orderid=$orderid", //订单支付完成后跳转的界面
+                'notice' => '/hotel/order/callback',  //异步回调地址
             ];
 
-            //要看是哪一种支付方式
-            if($order['type'] == 'wx')
+            //调用模型中的支付方法
+            $result = $this->PayModel->payment($data);
+
+            if($result['code'])
             {
-                //微信
-                $data['paytype'] = 0;
+                $this->success('创建支付订单成功', null, $result['data']);
+                exit;
             }else
             {
-                //支付宝
-                $data['paytype'] = 1;
-            }
-
-            //发起请求
-            $result = httpRequest($api, $data);
-            
-            //有错误
-            if(isset($result['code']) && $result['code'] == 0)
-            {
-                $this->error($result['msg']);
+                $this->error('创建支付订单失败');
                 exit;
             }
-
-            //将json转换为php数组
-            $result = json_decode($result, true);
-
-            $this->success('生成支付订单成功', null, $result['data']);
-            exit;
         }
     }
 

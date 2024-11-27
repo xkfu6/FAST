@@ -32,7 +32,7 @@ return array (
   'mail_type' => '1',
   'mail_smtp_host' => 'smtp.163.com',
   'mail_smtp_port' => '25',
-  'mail_smtp_user' => 'Fast云课堂',
+  'mail_smtp_user' => 'Fast',
   'mail_smtp_pass' => 'FLa4cfKgGfYqd55S',
   'mail_verify_type' => '0',
   'mail_from' => '17725688231@163.com',

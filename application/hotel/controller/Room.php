@@ -42,6 +42,9 @@ class Room extends Controller
                 ->limit($start, $limit)
                 ->select();
 
+            // echo $this->model->getLastSql();
+            // exit;
+
             if($room)
             {
                 $this->success('返回列表', null, $room);
@@ -80,7 +83,15 @@ class Room extends Controller
             //在数据中插入一个自定义的属性，用来表示是否可以预订
             $room['state'] = bcsub($room['total'], $count) <= 0 ? false : true;
 
-            $this->success('返回房间信息', null, $room);
+            //查询部分的评论数据
+            $comment = $this->OrderModel->with(['business'])->where(['roomid' => $rid])->limit(3)->select();
+
+            $data = [
+                'room' => $room,
+                'comment' => $comment
+            ];
+
+            $this->success('返回房间信息', null, $data);
             exit;
         }
     }

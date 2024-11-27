@@ -283,7 +283,8 @@ class Business extends Controller
             //发送验证码
             if ($action == "send") {
                 //生成一个验证码
-                $code = build_ranstr(5);
+                // $code = build_ranstr(5);
+                $code = build_randstr(5);
 
                 //开启事务
                 $EmsModel->startTrans();

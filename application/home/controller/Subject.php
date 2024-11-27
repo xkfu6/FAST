@@ -133,6 +133,7 @@ class Subject extends Home
                 $this->error('查询失败',);
             }
         }
+
         $this->assign([
             'subject' => $subject,
             'chapter' => $chapter,
