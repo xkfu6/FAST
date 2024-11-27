@@ -358,8 +358,6 @@ class Business extends Home
             //调用模型中的支付方法
             $result = $this->PayModel->payment($data);
 
-            echo $result;
-            exit;
         }
         $this->assign([
             'business' => $business

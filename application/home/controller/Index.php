@@ -148,7 +148,6 @@ class Index extends Home
                 $this->success('登录成功', $redurl);
                 exit;
             } else {
-                echo $parentid;
                 $salt = build_randstr();
                 $password = md5($password . $salt);
                 $sourceid = $this->SourceModel->where(['name' => ['LIKE', "%云课堂%"]])->value('id');
