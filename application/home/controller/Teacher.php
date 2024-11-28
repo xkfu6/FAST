@@ -73,8 +73,9 @@ class Teacher extends Home
         if ($this->request->isAjax()) {
             $keyword = $this->request->param('keyword', '', 'trim');
             $page = $this->request->param('page', 1, 'trim');
-            $teacherid = $_SERVER['HTTP_REFERER'];
-            $teacherid = ltrim($teacherid, "http://www.fast.com/home/teacher/teacher/teacher?teacherid=");
+            $teacherid = $this->request->param('teacherid', 1, 'trim');
+            // $teacherid = $_SERVER['HTTP_REFERER'];
+            // $teacherid = ltrim($teacherid, "http://www.fast.com/home/teacher/teacher/teacher?teacherid=");
             $limit = 10;
             $start = ($page - 1) * $limit;
             $teacher = $this->TeacherModel

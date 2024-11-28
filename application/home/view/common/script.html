@@ -10,7 +10,6 @@
     $('.footer-bar .tab-item').each(function (index, item) {
         var url = $(item).find('a').attr('href')
         if (location.pathname == url) {
-            // console.log(111)
             $(item).addClass('mui-active').siblings().removeClass('mui-active')
         }
     });

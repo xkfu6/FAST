@@ -83,7 +83,7 @@
             keyword,
         }
         var result = await POST({
-            url: '/teacher/teacher',
+            url: `/teacher/teacher?teacherid={$teacher.id}`,
             params
         })
         if (!result) return false
