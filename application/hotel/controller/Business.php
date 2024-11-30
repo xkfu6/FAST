@@ -700,4 +700,40 @@ class Business extends Controller
             }
         }
     }
+
+    // 余额支付
+    public function balancepay()
+    {
+        if ($this->request->isPost()) {
+            $busid = $this->request->param('busid', 0, 'trim');
+            $pay = $this->request->param('pay', '', 'trim');
+            $money = $this->request->param('money', 0, 'trim');
+            $business = $this->BusinessModel->find($busid);
+
+            if (!$business) {
+                $this->error('用户不存在');
+                exit;
+            }
+            $third = ['busid' => $busid];
+            //组装参数
+            $data = [
+                'name' => '余额充值', //标题
+                'third' => $third, //传递的第三方的参数
+                'total' => $money, //订单原价充值的价格
+                'type' => $pay, //支付方式
+                'cashier' => 0, //不需要收银台界面
+                'jump' => "/business/pay", //订单支付完成后跳转的界面
+                'notice' => '/hotel/order/callback',  //异步回调地址
+            ];
+            //调用模型中的支付方法
+            $result = $this->PayModel->payment($data);
+            if ($result['code']) {
+                $this->success('创建支付订单成功', null, $result['data']);
+                exit;
+            } else {
+                $this->error('创建支付订单失败');
+                exit;
+            }
+        }
+    }
 }

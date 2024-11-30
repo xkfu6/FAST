@@ -60,6 +60,9 @@ class Pay extends Command
             } else if ($item['name'] == "商品订单") {
                 $success = $this->shop($item['id'], $output);
                 $output->info($success['msg']);
+            } else if ($item['name'] == "酒店订单") {
+                $success = $this->hotel($item['id'], $output);
+                $output->info($success['msg']);
             }
         }
 
@@ -623,5 +626,118 @@ class Pay extends Command
             $this->result['result'] = false;
             return $this->result;
         }
+    }
+
+        //酒店预订
+    public function hotel($ids = 0, Output $output)
+    {
+        // pay 支付表 status = 1
+        //hotel_order 订单表 status = 1
+        // business_record 消费记录表 插入
+        $this->OrderModel = new \app\common\model\Hotel\Order();
+
+        //判断支付订单是否存在
+        $pay = $this->PayModel->find($ids);
+
+        if(!$pay)
+        {
+            $this->result['msg'] = '支付订单不存在';
+            $this->result['result'] = false;
+            return $this->result;
+        }
+
+        //消费金额
+        $total = isset($pay['total']) ? $pay['total'] : 0;
+        $total = floatval($total);
+        
+        //判断消费金额
+        if ($total < 0)
+        {
+            $this->result['msg'] = '消费金额为0';
+            $this->result['result'] = false;
+            return $this->result;
+        }
+
+        // 第三方参数(可多参数)
+        $third = isset($pay['third']) ? $pay['third'] : '';
+
+        // json字符串转换数组
+        $third = json_decode($third, true);
+
+        // 从数组获取充值的用户id
+        $orderid = isset($third['orderid']) ? $third['orderid'] : 0;
+
+        //判断订单是否存在
+        $order = $this->OrderModel->find($orderid);
+
+        if (!$order) 
+        {
+            $this->result['msg'] = '订单不存在';
+            $this->result['result'] = false;
+            return $this->result;
+        }
+
+        $this->PayModel->startTrans(); //支付表
+        $this->OrderModel->startTrans(); //更新订单支付状态
+        $this->RecordModel->startTrans(); //插入消费记录
+
+        $PayStatus = $this->PayModel->where(['id' => $ids])->update(['status' => '1']);
+
+        if($PayStatus === FALSE)
+        {
+            $this->result['msg'] = '更新支付记录失败';
+            $this->result['result'] = false;
+            return $this->result;
+        }
+
+        //订单表更新
+        $OrderStatus = $this->OrderModel->where(['id' => $orderid])->update(['status' => '1']);
+
+        if($OrderStatus === FALSE)
+        {
+            $this->PayModel->rollback();
+            $this->result['msg'] = '更新订单支付状态失败';
+            $this->result['result'] = false;
+            return $this->result;
+        }
+
+        //插入消费记录
+        $price = $order['price'];
+        $RecordData = [
+            'total' => "-$price",
+            'busid' => $order['busid'],
+            'content' => "酒店预订：消费的金额：$price 元",
+        ];
+
+        //插入语句
+        $RecordStatus = $this->RecordModel->validate('common/Business/Record')->save($RecordData);
+
+        if($RecordStatus === FALSE)
+        {
+            $this->OrderModel->rollback();
+            $this->PayModel->rollback();
+            $this->result['msg'] = '消费记录插入失败';
+            $this->result['result'] = false;
+            return $this->result;
+        }
+
+        if($PayStatus === FALSE || $OrderStatus === FALSE || $RecordStatus === FALSE)
+        {
+            $this->RecordModel->rollback();
+            $this->OrderModel->rollback();
+            $this->PayModel->rollback();
+            $this->result['msg'] = '支付失败';
+            $this->result['result'] = false;
+            return $this->result;
+        }else
+        {
+            $this->PayModel->commit();
+            $this->OrderModel->commit();
+            $this->RecordModel->commit();
+            $this->result['msg'] = '支付成功';
+            $this->result['result'] = true;
+            return $this->result;
+        }
+        
     }
 }

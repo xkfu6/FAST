@@ -10,7 +10,7 @@ class Order extends Controller
 {
     public function __construct()
     {
-        parent::__construct();   
+        parent::__construct();
 
         $this->BusinessModel = model('Business.Business');
         $this->PayModel = model('common/Pay/Pay');
@@ -19,21 +19,19 @@ class Order extends Controller
         $this->ReceiveModel = model('Coupon.Receive');
         $this->GuestModel = model('Hotel.Guest');
         $this->OrderModel = model('Hotel.Order');
-        
+
         $this->model = model('Hotel.Room');
     }
 
     //订单支付方法
     public function pay()
     {
-        if($this->request->isPost())
-        {
+        if ($this->request->isPost()) {
             $orderid = $this->request->param('orderid', 0, 'trim');
 
             $order = $this->OrderModel->find($orderid);
 
-            if(!$order)
-            {
+            if (!$order) {
                 $this->error('订单不存在');
                 exit;
             }
@@ -43,13 +41,12 @@ class Order extends Controller
 
             $business = $this->BusinessModel->find($busid);
 
-            if(!$business)
-            {
+            if (!$business) {
                 $this->error('用户不存在');
                 exit;
             }
-            
-            $third = json_encode(['orderid' => $orderid]);
+
+            $third = ['orderid' => $orderid];
 
 
             //组装参数
@@ -66,12 +63,10 @@ class Order extends Controller
             //调用模型中的支付方法
             $result = $this->PayModel->payment($data);
 
-            if($result['code'])
-            {
+            if ($result['code']) {
                 $this->success('创建支付订单成功', null, $result['data']);
                 exit;
-            }else
-            {
+            } else {
                 $this->error('创建支付订单失败');
                 exit;
             }
@@ -81,53 +76,18 @@ class Order extends Controller
     //查询支付订单是否支付完成
     public function query()
     {
-        if($this->request->isPost())
-        {
-            //判断当前用户是否存在
-            $busid = $this->request->param('busid', 0, 'trim');
-
-            $business = $this->BusinessModel->find($busid);
-
-            if(!$business)
-            {
-                $this->error('用户不存在');
-                exit;
-            }
-
+        if ($this->request->isPost()) {
             $payid = $this->request->param('payid', 0, 'trim');
 
             $pay = $this->PayModel->find($payid);
 
-            if(!$pay)
-            {
-                $this->error('支付记录不存在');
+            if (!$pay) {
+                $this->error('记录不存在');
                 exit;
             }
 
-            //获取域名部分
-            $host = Request::instance()->domain();
-            $host = trim($host, '/');
-
-            //完整的请求接口地址
-            $api = $host."/pay/index/status";
-
-            //发起请求
-            $result = httpRequest($api, ['payid'=>$payid]);
-
-            //将json转换为php数组
-            $result = json_decode($result, true);
-
-            if(isset($result['code']) && $result['code'] == 0)
-            {
-                $this->error($result['msg']);
-                exit;
-            }else
-            {
-                $status = isset($result['data']['status']) ? $result['data']['status'] : 0;
-                $reurl = isset($result['data']['reurl']) ? $result['data']['reurl'] : '';
-                $this->success('查询支付状态', null, ['status' => $status, 'reurl' => $reurl]);
-                exit;
-            }
+            $this->success('返回支付记录', null, $pay);
+            exit;
         }
     }
 
@@ -135,8 +95,7 @@ class Order extends Controller
     public function callback()
     {
         // 判断是否有post请求过来
-        if ($this->request->isPost()) 
-        {
+        if ($this->request->isPost()) {
             // 获取到所有的数据
             $params = $this->request->param();
 
@@ -159,8 +118,7 @@ class Order extends Controller
 
             $pay = $this->PayModel->find($payid);
 
-            if(!$pay)
-            {
+            if (!$pay) {
                 $this->error('支付订单不存在');
                 exit;
             }
@@ -187,8 +145,7 @@ class Order extends Controller
             //先查询酒店预订订单是否存在
             $order = $OrderModel->find($orderid);
 
-            if(!$order)
-            {
+            if (!$order) {
                 $this->error('预约订单不存在');
                 exit;
             }
@@ -205,8 +162,7 @@ class Order extends Controller
             // 插入
             $RecordStatus = $RecordModel->validate('common/Business/Record')->save($RecordData);
 
-            if($RecordStatus === false)
-            {
+            if ($RecordStatus === false) {
                 // return json(['code' => 0, 'msg' => $RecordModel->getError(), 'data' => null]);
                 $this->error($RecordModel->getError());
                 exit;
@@ -220,21 +176,18 @@ class Order extends Controller
 
             $OrderStatus = $OrderModel->isUpdate(true)->save($OrderData);
 
-            if($OrderStatus === FALSE)
-            {
+            if ($OrderStatus === FALSE) {
                 $this->RecordModel->rollback();
                 $this->error('订单支付状态修改失败');
                 exit;
             }
 
-            if($OrderStatus === false || $RecordStatus === false)
-            {
+            if ($OrderStatus === false || $RecordStatus === false) {
                 $RecordModel->rollback();
                 $OrderModel->rollback();
                 $this->error('支付回调失败');
                 exit;
-            }else
-            {
+            } else {
                 $RecordModel->commit();
                 $OrderModel->commit();
                 $this->success('订单支付成功');
@@ -245,18 +198,16 @@ class Order extends Controller
 
     public function index()
     {
-        if($this->request->isPost())
-        {
+        if ($this->request->isPost()) {
             $page = $this->request->param('page', '1', 'trim');
             $status = $this->request->param('status', '', 'trim');
             $busid = $this->request->param('busid', 0, 'trim');
             $limit = 10;
-            $start = ($page-1)*$limit;
+            $start = ($page - 1) * $limit;
 
             $where = ['busid' => $busid];
 
-            if(!empty($status) || $status == "0")
-            {
+            if (!empty($status) || $status == "0") {
                 $where['status'] = $status;
             }
 
@@ -266,12 +217,10 @@ class Order extends Controller
                 ->limit($start, $limit)
                 ->select();
 
-            if($list)
-            {
+            if ($list) {
                 $this->success('返回列表', null, $list);
                 exit;
-            }else
-            {
+            } else {
                 $this->error('暂无数据');
                 exit;
             }
@@ -280,8 +229,7 @@ class Order extends Controller
 
     public function info()
     {
-        if($this->request->isPost())
-        {
+        if ($this->request->isPost()) {
             $orderid = $this->request->param('orderid', 0, 'trim');
 
             //查询房间是否存在
@@ -290,51 +238,41 @@ class Order extends Controller
             //查询住客信息
             $guestids = empty($order['guest']) ? "" : trim($order['guest']);
 
-            $guest = $this->GuestModel->where(['id'=> ['IN',$guestids]])->select();
+            $guest = $this->GuestModel->where(['id' => ['IN', $guestids]])->select();
 
             $data = [
-                'order'=>$order,
-                'guest'=>$guest
+                'order' => $order,
+                'guest' => $guest
             ];
 
-            if($order)
-            {
+            if ($order) {
                 $this->success('返回订单信息', null, $data);
                 exit;
-            }else
-            {
+            } else {
                 $this->error('暂无订单信息');
                 exit;
             }
-
-        
-
-            
         }
     }
 
     public function comment()
     {
-        if($this->request->isPost())
-        {
+        if ($this->request->isPost()) {
             $orderid = $this->request->param('orderid', 0, 'trim');
             $comment = $this->request->param('comment', '', 'trim');
             $rate = $this->request->param('rate', 5, 'trim');
 
             $order = $this->OrderModel->find($orderid);
 
-            if(!$order)
-            {
+            if (!$order) {
                 $this->error('订单不存在');
                 exit;
             }
 
-            if($order['status'] == '4')
-            {
+            if ($order['status'] == '4') {
                 $this->error('无须重复评价');
                 exit;
-            }else if($order['status'] != '3')
-            {
+            } else if ($order['status'] != '3') {
                 $this->error('状态有误，暂时无法评价');
                 exit;
             }
@@ -349,12 +287,10 @@ class Order extends Controller
 
             $result = $this->OrderModel->isUpdate(true)->save($data);
 
-            if($result === FALSE)
-            {
+            if ($result === FALSE) {
                 $this->error('评价失败');
                 exit;
-            }else
-            {
+            } else {
                 $this->success('评论成功');
                 exit;
             }
@@ -363,20 +299,17 @@ class Order extends Controller
 
     public function apply()
     {
-        if($this->request->isAjax())
-        {
+        if ($this->request->isAjax()) {
             $orderid = $this->request->param('orderid', '0', 'trim');
 
             $order = $this->OrderModel->find($orderid);
 
-            if(!$order)
-            {
+            if (!$order) {
                 $this->error('订单不存在');
                 exit;
             }
 
-            if($order['status'] != '1')
-            {
+            if ($order['status'] != '1') {
                 $this->error('无法申请退款');
                 exit;
             }
@@ -389,16 +322,29 @@ class Order extends Controller
 
             $result = $this->OrderModel->isUpdate(true)->save($data);
 
-            if($result === FALSE)
-            {
+            if ($result === FALSE) {
                 $this->error('申请退款失败');
                 exit;
-            }else
-            {
+            } else {
                 $this->success('申请退款成功');
                 exit;
             }
         }
     }
-   
+
+    // 余额充值的订单信息
+    public function mypay()
+    {
+        if ($this->request->isPost()) {
+            $payid = $this->request->param('payid', 0, 'trim');
+
+            $pay = $this->PayModel->find($payid);
+            if (!$pay) {
+                $this->error('记录不存在');
+                exit;
+            }
+            $this->success('返回支付记录', null, $pay);
+            exit;
+        }
+    }
 }
