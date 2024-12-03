@@ -1,4 +1,14 @@
 <?php
+/*
+ * @Author: xz 12597103+xzfu@user.noreply.gitee.com
+ * @Date: 2024-09-23 10:13:04
+ * @LastEditors: xz 12597103+xzfu@user.noreply.gitee.com
+ * @LastEditTime: 2024-12-03 17:09:23
+ * @FilePath: \fast\application\database.php
+ * @Description: 
+ * 
+ * Copyright (c) 2024 by ${git_name_email}, All Rights Reserved. 
+ */
 
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
