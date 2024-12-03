@@ -24,7 +24,7 @@
 }
 
 .swiper-slide a {
-    width:100%;
+    width: 100%;
     height: 240px;
 }
 
@@ -35,13 +35,21 @@
     object-fit: cover;
 }
 
+.mui-content {
+    width: 100%;
+}
+
+.mui-content img {
+    width: 100%;
+}
+
 .swiper-slide .mui-slider-title {
     background-color: #5b5555;
     color: white;
 }
 
 /* 四个图标的菜单 */
-.menulist{
+.menulist {
     display: flex;
     width: 100%;
     justify-content: space-between;
@@ -51,49 +59,49 @@
     margin-bottom: 10px;
 }
 
-.menulist .item{
+.menulist .item {
     width: 25%;
     text-align: center;
 }
 
-.menulist .item a{
+.menulist .item a {
     color: #000;
 }
 
-.menulist .item img{
+.menulist .item img {
     width: 45px;
     margin-bottom: 10px;
 }
 
 /* 精选课程 */
-.list{
+.list {
     background: #fff;
     padding: 10px 0 0;
 }
 
-.list > .title{
+.list>.title {
     text-align: center;
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 15px;
 }
 
-.list ul{
+.list ul {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     padding: 0 10px;
 }
 
-.list ul li{
+.list ul li {
     box-shadow: 0px 0px 10px 0px #ccc;
     width: 49%;
     padding: 10px;
     margin-bottom: 10px;
 }
 
-.list ul li a{
-    width:100%;
+.list ul li a {
+    width: 100%;
 }
 
 .list .imgs {
@@ -106,13 +114,13 @@
     object-fit: cover;
 }
 
-.list .mui-media-body{
+.list .mui-media-body {
     margin-top: 10px;
     color: #333;
     font-weight: bold;
 }
 
-.list ul li .info{
+.list ul li .info {
     display: flex;
     justify-content: space-between;
     margin-top: 10px;
@@ -120,29 +128,29 @@
     align-items: center;
 }
 
-.list li .info img{
+.list li .info img {
     width: 15px;
     margin-top: -5px;
 }
 
-.list li .info .price{
+.list li .info .price {
     color: red;
 }
 
-.list li .info .like{
+.list li .info .like {
     color: red;
 }
 
 
-.list.teacher .imgs{
+.list.teacher .imgs {
     /* width: 153px; */
-    width:100%;
+    width: 100%;
 }
 
-.list.teacher li .info .num{
+.list.teacher li .info .num {
     color: red;
 }
 
-.list.teacher li .info img{
+.list.teacher li .info img {
     margin-top: -3px;
 }
